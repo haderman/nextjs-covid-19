@@ -1,12 +1,14 @@
 import Link from 'next/link'
-import useSWR from "swr"
 
 import Stack from "./common/stack"
 import Inline from "./common/inline"
-import AppContext, { useAppState } from "./contexts/appState"
+import Chip from "./common/chip"
+import Numeric from "./common/numeric"
+import { useAppState } from "./contexts/appState"
 
 import api from "../utils/api"
-import * as size from '../utils/size'
+import * as size from "../utils/size"
+import * as color from "../utils/color"
 
 function Sidebar() {
   const { countries, summary } = useAppState()
@@ -17,6 +19,9 @@ function Sidebar() {
         <GlobalSummary summary={summary} />
       </Stack>
       <Stack size={size.XL}>
+        <div className="border-bottom-s border-color-soft"></div>
+      </Stack>
+      <Stack size={size.XL}>
         <Countries countries={countries} summary={summary} />
       </Stack>
     </aside>
@@ -24,13 +29,6 @@ function Sidebar() {
 }
 
 function GlobalSummary({ summary }) {
-  const viewData = (key, value) => (
-    <p>
-      <span><b>{key.split(/(?=[A-Z])/).join(" ")}: </b></span>
-      <span className="text-secondary">{value}</span>
-    </p>
-  )
-
   return (
     <section className="clean-last-stack">
       {summary.status === api.requestStatus.ERROR ?
@@ -39,11 +37,46 @@ function GlobalSummary({ summary }) {
         <h2>Loading...</h2>
       :summary.status === api.requestStatus.SUCCESS ?
         <>
-          {Object.entries(summary.data.global).map(([key, value]) =>
-            <Stack key={key} size={size.S}>
-              {viewData(key, value)}
-            </Stack>
-          )}
+          <Stack size={size.L}>
+            <h2 className="text-red">
+              <Numeric value={summary.data.global.TotalConfirmed} />
+            </h2>
+          </Stack>
+          <div className="grid grid-gap-m grid-col-3-auto">
+            {/* row 1 */}
+            <span className="text-secondary">Actives</span>
+            <Numeric
+              value={summary.data.global.TotalConfirmed - summary.data.global.TotalRecovered - summary.data.global.TotalDeaths}
+              className="text-orange text-end"
+            />
+            <span className="text-end">
+              <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
+                + <Numeric value={summary.data.global.NewConfirmed} />
+              </Chip>
+            </span>
+            {/* row 2 */}
+            <span className="text-secondary">Recovered</span>
+            <Numeric
+              value={summary.data.global.TotalRecovered}
+              className="text-green text-end"
+            />
+            <span className="text-end">
+              <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
+                + <Numeric value={summary.data.global.NewRecovered} />
+              </Chip>
+            </span>
+            {/* row 3 */}
+            <span className="text-secondary">Deaths</span>
+            <Numeric
+              value={summary.data.global.TotalDeaths}
+              className="text-gray text-end"
+            />
+            <span className="text-end">
+              <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
+                + <Numeric value={summary.data.global.NewDeaths} />
+              </Chip>
+            </span>
+          </div>
         </>
       :null
       }
@@ -52,81 +85,45 @@ function GlobalSummary({ summary }) {
 }
 
 function Countries({ countries, summary }) {
-  const viewData = (country) => {
-    const info = summary.data?.countriesMap?.[country.Slug] ?? {
-      TotalConfirmed: 0,
-      TotalRecovered: 0,
-      TotalDeaths: 0
-    }
-
-    return (
-      <article className="clean-last-stack">
-        <Stack size={size.S}>
-          <h4>{country.Country}</h4>
-        </Stack>
-        {summary.status === api.requestStatus.LOADING ?
-          <Stack size={size.XS}>
-            <Inline size={size.S}>
-              <span className="skeleton">
-                <Chip size={size.M}>000</Chip>
-              </span>
-            </Inline>
-            <Inline size={size.S}>
-              <span className="skeleton">
-                <Chip size={size.M}>000</Chip>
-              </span>
-            </Inline>
-            <Inline size={size.S}>
-              <span className="skeleton">
-                <Chip size={size.M}>000</Chip>
-              </span>
-            </Inline>
-          </Stack>
-        :summary.status === api.requestStatus.SUCCESS ?
-          <Stack size={size.XS}>
-            <Inline size={size.S}>
-              <Chip size={size.M}>{info.TotalConfirmed}</Chip>
-            </Inline>
-            <Inline size={size.S}>
-              <Chip size={size.M}>{info.TotalRecovered}</Chip>
-            </Inline>
-            <Inline size={size.S}>
-              <Chip size={size.M}>{info.TotalDeaths}</Chip>
-            </Inline>
-          </Stack>
-        :null
-        }
-      </article>
-    )
-  }
-
   return (
     <section className="clean-last-stack">
       <Stack size={size.M}>
         <h3>Countries</h3>
       </Stack>
-      {countries.map((country, index) =>
-        <Stack key={country.Country} size={size.L}>
-          <Link href="/countries/[slug]" as={`/countries/${country.Slug}`}>
-            <a>{viewData(country)}</a>
-          </Link>
-        </Stack>
-      )}
+      <ul>
+        {countries
+          .map(country => summary.data?.countriesMap?.[country.Slug])
+          .filter(countryInfo => countryInfo !== undefined && countryInfo.TotalConfirmed !== 0)
+          .sort((a, b) => b.NewConfirmed - a.NewConfirmed)
+          .map(countryInfo =>
+            <Stack key={countryInfo.Country} size={size.S} as="li">
+              <Link href="/countries/[slug]" as={`/countries/${countryInfo.Slug}`}>
+                <a>
+                  <article className="clean-last-stack flex justify-space-between align-center inset-s border-s border-color-strong rounded-s border-dashed">
+                    <span className="text-m">{countryInfo.Country}</span>
+                    {summary.status === api.requestStatus.LOADING ?
+                      <span className="skeleton">
+                        <Chip size={size.M}>000</Chip>
+                      </span>
+                    :summary.status === api.requestStatus.SUCCESS ?
+                      <Chip
+                        size={size.S}
+                        rounded={size.XL}
+                        background={color.DEEP_0}
+                      >
+                        + <Numeric value={countryInfo.NewConfirmed} />
+                      </Chip>
+                    :null
+                    }
+                  </article>
+                </a>
+              </Link>
+            </Stack>
+          )
+        }
+      </ul>
     </section>
   )
 }
-
-function Chip({ children, size }) {
-  return (
-    <span className={`rounded squish-inset-xs border-s border-color-strong text-secondary text-${size}`}>
-      {children}
-    </span>
-  )
-}
-
-Chip.propTypes = {
-  size: size.isSize
-}
-
 
 export default Sidebar
