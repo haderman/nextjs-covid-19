@@ -1,3 +1,6 @@
+import Head from 'next/head'
+import dynamic from "next/dynamic"
+import { useMemo } from "react"
 import Stack from "../../components/common/stack"
 import Inline from "../../components/common/inline"
 import Numeric from "../../components/common/numeric"
@@ -6,6 +9,14 @@ import { useAppState } from "../../components/contexts/appState"
 import api from "../../utils/api"
 import * as size from '../../utils/size'
 import * as color from "../../utils/color"
+
+/**
+ * @link https://nextjs.org/docs/advanced-features/dynamic-import
+ */
+const Chart = dynamic(() =>
+  import("react-charts").then(mod => mod.Chart),
+  { ssr: false }
+)
 
 export async function getServerSideProps({ params: { slug } }) {
   console.log("slug: ", slug)
@@ -24,21 +35,30 @@ export default function Country({ slug }) {
   }
 
   const country = summary.data.countriesMap[slug]
-  console.log("country: ", country)
   return (
     <>
+      <Head>
+        <title>{country.Country}</title>
+      </Head>
       <Stack size={size.M}>
         <h3>{country.Country}</h3>
       </Stack>
-      <Stack size={size.M}>
+      <Stack size={size.XL}>
         <ViewSummary country={country} />
+      </Stack>
+      <Stack size={size.XL}>
+        <section>
+          <Stack size={size.M}>
+            <h4>Spread over time</h4>
+          </Stack>
+          <MyChart />
+        </section>
       </Stack>
     </>
   )
 }
 
 function ViewSummary({ country }) {
-  console.log("COUNTRY: ", country)
   return (
     <section className="flex flex-children-1">
       <Inline size={size.M}>
@@ -116,5 +136,56 @@ function Card(props) {
 function Skeleton() {
   return (
     <h3>Loading...</h3>
+  )
+}
+
+function MyChart() {
+  const data = useMemo(
+    () => [
+      {
+        label: 'Series 1',
+        data: [
+          { x: 1, y: 10 },
+          { x: 2, y: 20 },
+          { x: 3, y: 30 },
+        ],
+      },
+      {
+        label: 'Series 2',
+        data: [
+          { x: 1, y: 16 },
+          { x: 2, y: 32 },
+          { x: 3, y: 640 },
+        ],
+      },
+      {
+        label: 'Series 3',
+        data: [
+          { x: 1, y: 10 },
+          { x: 2, y: 40 },
+          { x: 3, y: 10 },
+        ],
+      },
+    ],
+    []
+  )
+
+  const axes = React.useMemo(
+    () => [
+      { primary: true, type: 'linear', position: 'bottom' },
+      { type: 'linear', position: 'left' },
+    ],
+    []
+  )
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '400px',
+      }}
+    >
+      <Chart data={data} axes={axes} dark />
+    </div>
   )
 }

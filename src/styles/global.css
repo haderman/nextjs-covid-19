@@ -320,6 +320,7 @@ input[type=text]:focus {
 .background-gray-soft { background-color: var(--color-gray-soft); }
 
 /* LAYOUTS */
+.block { display: block; }
 .flex { display: flex; }
 .inline-flex { display: inline-flex; }
 .justify-center { justify-content: center; }
