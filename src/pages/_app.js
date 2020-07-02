@@ -1,8 +1,6 @@
 // https://nextjs.org/docs/advanced-features/custom-app
 
-import { useState, useEffect } from "react"
-import useSWR from "swr"
-import Layout from "../components/Layout"
+import Layout from "../components/layout"
 import AppState from "../components/contexts/appState"
 import useSWRWrapper from "../hooks/useSWRWrapper"
 import api from "../utils/api"
