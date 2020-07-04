@@ -3,7 +3,7 @@ import Link from "next/link"
 import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
-import useSWRWrapper from "../hooks/useSWRWrapper"
+import useWorldTotalData from "../hooks/useWorldTotalData"
 import Stack from "../components/common/stack"
 import * as size from "../utils/size"
 import * as color from "../utils/color"
@@ -15,7 +15,7 @@ const Chart = dynamic(() =>
 )
 
 export default function Home() {
-  const { status, data } = useSWRWrapper("world/total", api.getWorldTotal)
+  const { status, data } = useWorldTotalData()
 
   return (
     <>

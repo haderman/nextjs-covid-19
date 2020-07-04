@@ -34,58 +34,63 @@ function GlobalSummary({ summary }) {
       :summary.status === api.requestStatus.LOADING ?
         <h2>Loading...</h2>
       :summary.status === api.requestStatus.SUCCESS ?
-        <Link href="/">
-          <a className="block stretch-inset-m rounded border-s border-color-strong border-dashed">
-            <Stack size={size.L}>
-              <h4>Total confirmed cases</h4>
-            </Stack>
-            <Stack size={size.L}>
-              <span className="text-secondary text-s">
-                Updated <time>{prettyDate(summary.data.date)}</time>
-              </span>
-            </Stack>
-            <Stack size={size.L}>
-              <h2 className="text-red">
-                <Numeric value={summary.data.global.TotalConfirmed} />
-              </h2>
-            </Stack>
-            <div className="grid grid-gap-m grid-col-3-auto">
-              {/* row 1 */}
-              <span className="text-secondary">Actives</span>
-              <Numeric
-                value={summary.data.global.TotalConfirmed - summary.data.global.TotalRecovered - summary.data.global.TotalDeaths}
-                className="text-orange text-end"
-              />
-              <span className="text-end">
-                <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
-                  + <Numeric value={summary.data.global.NewConfirmed} />
-                </Chip>
-              </span>
-              {/* row 2 */}
-              <span className="text-secondary">Recovered</span>
-              <Numeric
-                value={summary.data.global.TotalRecovered}
-                className="text-green text-end"
-              />
-              <span className="text-end">
-                <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
-                  + <Numeric value={summary.data.global.NewRecovered} />
-                </Chip>
-              </span>
-              {/* row 3 */}
-              <span className="text-secondary">Deaths</span>
-              <Numeric
-                value={summary.data.global.TotalDeaths}
-                className="text-gray text-end"
-              />
-              <span className="text-end">
-                <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
-                  + <Numeric value={summary.data.global.NewDeaths} />
-                </Chip>
-              </span>
-            </div>
-          </a>
-        </Link>
+        <>
+          <Stack size={size.XS}>
+            <h3>Global cases</h3>
+          </Stack>
+          <Stack size={size.M}>
+            <span className="text-secondary text-s">
+              Updated <time>{prettyDate(summary.data.date)}</time>
+            </span>
+          </Stack>
+          <Link href="/">
+            <a className="block stretch-inset-m rounded border-s border-color-strong background-interactive">
+              <Stack size={size.S}>
+                <h4>Total confirmed cases</h4>
+              </Stack>
+              <Stack size={size.L}>
+                <h2 className="text-red">
+                  <Numeric value={summary.data.global.TotalConfirmed} />
+                </h2>
+              </Stack>
+              <div className="grid grid-gap-m grid-col-3-auto">
+                {/* row 1 */}
+                <span className="text-secondary">Actives</span>
+                <Numeric
+                  value={summary.data.global.TotalConfirmed - summary.data.global.TotalRecovered - summary.data.global.TotalDeaths}
+                  className="text-orange text-end"
+                />
+                <span className="text-end">
+                  <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
+                    + <Numeric value={summary.data.global.NewConfirmed} />
+                  </Chip>
+                </span>
+                {/* row 2 */}
+                <span className="text-secondary">Recovered</span>
+                <Numeric
+                  value={summary.data.global.TotalRecovered}
+                  className="text-green text-end"
+                />
+                <span className="text-end">
+                  <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
+                    + <Numeric value={summary.data.global.NewRecovered} />
+                  </Chip>
+                </span>
+                {/* row 3 */}
+                <span className="text-secondary">Deaths</span>
+                <Numeric
+                  value={summary.data.global.TotalDeaths}
+                  className="text-gray text-end"
+                />
+                <span className="text-end">
+                  <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
+                    + <Numeric value={summary.data.global.NewDeaths} />
+                  </Chip>
+                </span>
+              </div>
+            </a>
+          </Link>
+        </>
       :null
       }
     </section>
@@ -106,24 +111,22 @@ function Countries({ countries, summary }) {
           .map(countryInfo =>
             <Stack key={countryInfo.Country} size={size.S} as="li">
               <Link href="/countries/[slug]" as={`/countries/${countryInfo.Slug}`}>
-                <a>
-                  <article className="clean-last-stack flex justify-space-between align-center inset-s border-s border-color-strong rounded-s border-dashed">
-                    <span className="text-m">{countryInfo.Country}</span>
-                    {summary.status === api.requestStatus.LOADING ?
-                      <span className="skeleton">
-                        <Chip size={size.M}>000</Chip>
-                      </span>
-                    :summary.status === api.requestStatus.SUCCESS ?
-                      <Chip
-                        size={size.S}
-                        rounded={size.XL}
-                        background={color.DEEP_0}
-                      >
-                        + <Numeric value={countryInfo.NewConfirmed} />
-                      </Chip>
-                    :null
-                    }
-                  </article>
+                <a className="flex justify-space-between align-center inset-s border-s border-color-strong rounded-s background-interactive">
+                  <span className="text-m">{countryInfo.Country}</span>
+                  {summary.status === api.requestStatus.LOADING ?
+                    <span className="skeleton">
+                      <Chip size={size.M}>000</Chip>
+                    </span>
+                  :summary.status === api.requestStatus.SUCCESS ?
+                    <Chip
+                      size={size.S}
+                      rounded={size.XL}
+                      background={color.DEEP_0}
+                    >
+                      + <Numeric value={countryInfo.NewConfirmed} />
+                    </Chip>
+                  :null
+                  }
                 </a>
               </Link>
             </Stack>

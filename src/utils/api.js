@@ -53,6 +53,14 @@ const requestStatus = {
   ERROR: "error",
 }
 
+function statusFriendly(swrResponse) {
+  const { data, error } = swrResponse
+
+  return error ? requestStatus.ERROR
+    : !data ? requestStatus.LOADING
+    : requestStatus.SUCCESS
+}
+
 export default {
   getStats,
   getSummary,
@@ -61,4 +69,5 @@ export default {
   getWorldTotal,
   getCountryTotal,
   requestStatus,
+  statusFriendly,
 }

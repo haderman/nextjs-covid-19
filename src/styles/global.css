@@ -28,6 +28,8 @@
   --color-accent: hsl(48, 100%, 50%);
   --color-warning: hsl(358, 57%, 50%);
   --color-disabled: hsl(0, 0%, 42%);
+  --color-interactive-soft: hsl(200, 20%, 7%);
+  --color-interactive-soft-hover: hsl(200, 40%, 10%);
 
   --color-red: hsl(0, 60%, 40%);
   --color-red-soft: hsla(0, 67%, 55%, 0.2);
@@ -119,7 +121,7 @@ body {
 }
 
 header {
-  padding: var(--size-m) var(--size-l);
+  padding: var(--size-m) var(--size-m);
 }
 
 aside {
@@ -315,7 +317,6 @@ input[type=text]:focus {
 .background-deep-4 { background-color: var(--color-deep-4); }
 .background-deep-5 { background-color: var(--color-deep-5); }
 .background-deep-6 { background-color: var(--color-deep-6); }
-.background-interactive { background-color: var(--color-interactive); }
 .background-green { background-color: var(--color-green); }
 .background-green-soft { background-color: var(--color-green-soft); }
 .background-orange { background-color: var(--color-orange); }
@@ -324,6 +325,8 @@ input[type=text]:focus {
 .background-red-soft { background-color: var(--color-red-soft); }
 .background-gray { background-color: var(--color-gray); }
 .background-gray-soft { background-color: var(--color-gray-soft); }
+.background-interactive { background-color: var(--color-interactive-soft); }
+.background-interactive:hover { background-color: var(--color-interactive-soft-hover); }
 
 /* LAYOUTS */
 .block { display: block; }
