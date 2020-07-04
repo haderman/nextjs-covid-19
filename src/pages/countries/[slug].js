@@ -124,7 +124,7 @@ function Card(props) {
           rounded={size.XL}
           background={bottomTextColor}
         >
-          + <Numeric value={bottomText} />
+          {bottomText >= 0 && "+"}<Numeric value={bottomText} />
         </Chip>
       </Stack>
     </article>

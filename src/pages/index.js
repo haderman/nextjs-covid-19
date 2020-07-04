@@ -28,11 +28,6 @@ export default function Home() {
       <Stack size={size.XL}>
         {status === api.requestStatus.SUCCESS && <MyChart data={data} />}
       </Stack>
-      <div className="text-primary">
-        <Link href="/test">
-          <a>Go to TEst Page</a>
-        </Link>
-      </div>
     </>
   )
 }

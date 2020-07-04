@@ -114,18 +114,24 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  height: 100vh;
+}
+
+header {
+  padding: var(--size-m) var(--size-l);
 }
 
 aside {
   width: clamp(320px, 20vw, 400px);
-  height: 100vh;
+  height: calc(100vh - calc(var(--size-m) * 2));
   overflow: auto;
   border-right: 1px solid var(--color-border-soft);
 }
 
 main {
   overflow: auto;
-  height: 100vh;
+  height: calc(100vh - calc(var(--size-m) * 2));
 }
 
 h1 {
