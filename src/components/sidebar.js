@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
 import Stack from "./common/stack"
-import Inline from "./common/inline"
 import Chip from "./common/chip"
 import Numeric from "./common/numeric"
-import { useAppState } from "./contexts/appState"
+import ListCountries from "./common/listCountries"
+import useSummaryData from "../hooks/useSummaryData"
 
 import api from "../utils/api"
 import * as size from "../utils/size"
@@ -12,7 +12,7 @@ import * as color from "../utils/color"
 import prettyDate from "../utils/prettyDate"
 
 function Sidebar() {
-  const { countries, summary } = useAppState()
+  const summary = useSummaryData()
 
   return (
     <aside className="background-deep-1 inset-m">
@@ -20,7 +20,7 @@ function Sidebar() {
         <GlobalSummary summary={summary} />
       </Stack>
       <Stack size={size.XL}>
-        <Countries countries={countries} summary={summary} />
+        <ListCountries />
       </Stack>
     </aside>
   )
@@ -49,9 +49,14 @@ function GlobalSummary({ summary }) {
                 <h4>Total confirmed cases</h4>
               </Stack>
               <Stack size={size.L}>
-                <h2 className="text-red">
-                  <Numeric value={summary.data.global.TotalConfirmed} />
-                </h2>
+                <div className="flex justify-space-between align-center">
+                  <h3 className="text-red text-xl">
+                    <Numeric value={summary.data.global.TotalConfirmed} />
+                  </h3>
+                  <Chip rounded={size.L} background={color.RED_SOFT} size={size.S}>
+                    + <Numeric value={summary.data.global.NewConfirmed} />
+                  </Chip>
+                </div>
               </Stack>
               <div className="grid grid-gap-m grid-col-3-auto">
                 {/* row 1 */}
@@ -93,46 +98,6 @@ function GlobalSummary({ summary }) {
         </>
       :null
       }
-    </section>
-  )
-}
-
-function Countries({ countries, summary }) {
-  return (
-    <section className="clean-last-stack">
-      <Stack size={size.M}>
-        <h3>Countries</h3>
-      </Stack>
-      <ul>
-        {countries
-          .map(country => summary.data?.countriesMap?.[country.Slug])
-          .filter(countryInfo => countryInfo !== undefined && countryInfo.TotalConfirmed !== 0)
-          .sort((a, b) => b.NewConfirmed - a.NewConfirmed)
-          .map(countryInfo =>
-            <Stack key={countryInfo.Country} size={size.S} as="li">
-              <Link href="/countries/[slug]" as={`/countries/${countryInfo.Slug}`}>
-                <a className="flex justify-space-between align-center inset-s border-s border-color-strong rounded-s background-interactive">
-                  <span className="text-m">{countryInfo.Country}</span>
-                  {summary.status === api.requestStatus.LOADING ?
-                    <span className="skeleton">
-                      <Chip size={size.M}>000</Chip>
-                    </span>
-                  :summary.status === api.requestStatus.SUCCESS ?
-                    <Chip
-                      size={size.S}
-                      rounded={size.XL}
-                      background={color.DEEP_0}
-                    >
-                      + <Numeric value={countryInfo.NewConfirmed} />
-                    </Chip>
-                  :null
-                  }
-                </a>
-              </Link>
-            </Stack>
-          )
-        }
-      </ul>
     </section>
   )
 }

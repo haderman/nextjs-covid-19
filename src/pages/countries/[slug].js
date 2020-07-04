@@ -6,7 +6,7 @@ import Stack from "../../components/common/stack"
 import Inline from "../../components/common/inline"
 import Numeric from "../../components/common/numeric"
 import Chip from "../../components/common/chip"
-import { useAppState } from "../../components/contexts/appState"
+import useSummaryData from "../../hooks/useSummaryData"
 import api from "../../utils/api"
 import * as size from '../../utils/size'
 import * as color from "../../utils/color"
@@ -22,7 +22,7 @@ export async function getServerSideProps({ params: { slug } }) {
 }
 
 export default function Country({ slug, data }) {
-  const { summary } = useAppState()
+  const summary = useSummaryData()
 
   if (summary.status === api.requestStatus.LOADING) {
     return <Skeleton />

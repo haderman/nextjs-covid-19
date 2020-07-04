@@ -2,17 +2,11 @@
 
 import Layout from "../components/layout"
 import AppState from "../components/contexts/appState"
-import useSummaryData from "../hooks/useSummaryData"
 import api from "../utils/api"
 import "../styles/global.css"
 
 function App({ Component, pageProps, countries }) {
-  const summary = useSummaryData()
-
-  const store = {
-    countries,
-    summary
-  }
+  const store = { countries }
 
   return (
     <AppState.Provider value={store}>
