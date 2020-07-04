@@ -20,9 +20,6 @@ function Sidebar() {
         <GlobalSummary summary={summary} />
       </Stack>
       <Stack size={size.XL}>
-        <div className="border-bottom-s border-color-soft"></div>
-      </Stack>
-      <Stack size={size.XL}>
         <Countries countries={countries} summary={summary} />
       </Stack>
     </aside>

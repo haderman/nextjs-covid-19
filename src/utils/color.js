@@ -14,6 +14,15 @@ export const RED_SOFT = "red-soft"
 export const GRAY = "gray"
 export const GRAY_SOFT = "gray-soft"
 
+export function toHSL(color) {
+  switch (color) {
+    case GREEN: return "hsl(120, 60%, 40%)"
+    case RED: return "hsl(0, 60%, 40%)"
+    case ORANGE: return "hsl(40, 60%, 40%)"
+    case GRAY: return "hsl(0, 0%, 46%)"
+    default: return "hsl(0, 0%, 46%)"
+  }
+}
 
 /**
  * Custom PropType validation

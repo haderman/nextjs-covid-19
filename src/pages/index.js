@@ -1,20 +1,22 @@
 import Head from "next/head"
 import Link from "next/link"
 import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useMemo, useCallback } from "react"
 
+import useSWRWrapper from "../hooks/useSWRWrapper"
 import Stack from "../components/common/stack"
-import * as size from '../utils/size'
+import * as size from "../utils/size"
+import * as color from "../utils/color"
+import api from "../utils/api"
 
-/**
- * @link https://nextjs.org/docs/advanced-features/dynamic-import
- */
 const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),
   { ssr: false }
 )
 
 export default function Home() {
+  const { status, data } = useSWRWrapper("world/total", api.getWorldTotal)
+
   return (
     <>
       <Head>
@@ -24,7 +26,7 @@ export default function Home() {
         <h3>Global</h3>
       </Stack>
       <Stack size={size.XL}>
-        <MyChart />
+        {status === api.requestStatus.SUCCESS && <MyChart data={data} />}
       </Stack>
       <div className="text-primary">
         <Link href="/test">
@@ -35,32 +37,40 @@ export default function Home() {
   )
 }
 
-function MyChart() {
+function MyChart(props) {
+  const sortedData = props.data
+    .sort((a, b) => a.TotalConfirmed - b.TotalConfirmed)
+    .map((data, index) => {
+      const day = new Date()
+      day.setDate(day.getDate() - props.data.length + index + 1)
+      return {
+        x: day,
+        data
+      }
+    })
+
   const data = useMemo(
     () => [
       {
-        label: 'Series 1',
-        data: [
-          { x: 1, y: 10 },
-          { x: 2, y: 20 },
-          { x: 3, y: 30 },
-        ],
+        label: 'Total Confirmed',
+        data: sortedData.map(({x, data}) => ({
+          x,
+          y: data.TotalConfirmed
+        })),
       },
       {
-        label: 'Series 2',
-        data: [
-          { x: 1, y: 16 },
-          { x: 2, y: 32 },
-          { x: 3, y: 640 },
-        ],
+        label: 'Total Recovered',
+        data: sortedData.map(({x, data}) => ({
+          x,
+          y: data.TotalRecovered
+        })),
       },
       {
-        label: 'Series 3',
-        data: [
-          { x: 1, y: 10 },
-          { x: 2, y: 40 },
-          { x: 3, y: 10 },
-        ],
+        label: 'Total Deaths',
+        data: sortedData.map(({x, data}) => ({
+          x,
+          y: data.TotalDeaths
+        })),
       },
     ],
     []
@@ -68,9 +78,43 @@ function MyChart() {
 
   const axes = React.useMemo(
     () => [
-      { primary: true, type: 'linear', position: 'bottom' },
+      { primary: true, type: 'time', position: 'bottom' },
       { type: 'linear', position: 'left' },
     ],
+    []
+  )
+
+  const series = useMemo(
+    () => ({
+      showPoints: false
+    }),
+    []
+  )
+
+  const primaryCursor = React.useMemo(
+    () => ({
+      render: props => (
+        <span>
+          {new Date(props.value).toDateString()}
+        </span>
+      )
+    }),
+    []
+  )
+
+  const colorPalette = {
+    "Total Confirmed": color.toHSL(color.RED),
+    "Total Recovered": color.toHSL(color.GREEN),
+    "Total Deaths": color.toHSL(color.GRAY),
+    "Total Actives": color.toHSL(color.ORANGE),
+  };
+
+  const getSeriesStyle = useCallback(
+    (series) => ({
+      transition: 'all .5s ease',
+      fill: colorPalette[series.label],
+      color: colorPalette[series.label],
+    }),
     []
   )
 
@@ -81,7 +125,15 @@ function MyChart() {
         height: '400px',
       }}
     >
-      <Chart data={data} axes={axes} dark />
+      <Chart
+        dark
+        tooltip
+        primaryCursor={primaryCursor}
+        data={data}
+        axes={axes}
+        series={series}
+        getSeriesStyle={getSeriesStyle}
+      />
     </div>
   )
 }

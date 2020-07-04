@@ -37,6 +37,16 @@ function getVersion() {
   return requests.get("version")
 }
 
+function getWorldTotal() {
+  const to = new Date().toISOString()
+  return requests.get(`world?from=2020-03-01T00:00:00Z&to=${to}`)
+}
+
+function getCountryTotal(slug) {
+  const to = new Date().toISOString()
+  return requests.get(`total/country/${slug}?from=2020-03-01T00:00:00Z}&to=${to}`)
+}
+
 const requestStatus = {
   SUCCESS: "success",
   LOADING: "loading",
@@ -48,5 +58,7 @@ export default {
   getSummary,
   getVersion,
   getCountries,
+  getWorldTotal,
+  getCountryTotal,
   requestStatus,
 }

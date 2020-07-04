@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useMemo, useCallback } from "react"
+
 import Stack from "../../components/common/stack"
 import Inline from "../../components/common/inline"
 import Numeric from "../../components/common/numeric"
@@ -10,20 +11,17 @@ import api from "../../utils/api"
 import * as size from '../../utils/size'
 import * as color from "../../utils/color"
 
-/**
- * @link https://nextjs.org/docs/advanced-features/dynamic-import
- */
 const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),
   { ssr: false }
 )
 
 export async function getServerSideProps({ params: { slug } }) {
-  console.log("slug: ", slug)
-  return { props: { slug } }
+  const data = await api.getCountryTotal(slug)
+  return { props: { slug, data } }
 }
 
-export default function Country({ slug }) {
+export default function Country({ slug, data }) {
   const { summary } = useAppState()
 
   if (summary.status === api.requestStatus.LOADING) {
@@ -51,7 +49,7 @@ export default function Country({ slug }) {
           <Stack size={size.M}>
             <h4>Spread over time</h4>
           </Stack>
-          <MyChart />
+          <MyChart data={data || []} />
         </section>
       </Stack>
     </>
@@ -139,42 +137,92 @@ function Skeleton() {
   )
 }
 
-function MyChart() {
+function MyChart(props) {
+  const items = props.data.map(country => ({
+    ...country,
+    Date: new Date(country.Date)
+  }))
+
   const data = useMemo(
     () => [
       {
-        label: 'Series 1',
-        data: [
-          { x: 1, y: 10 },
-          { x: 2, y: 20 },
-          { x: 3, y: 30 },
-        ],
+        label: 'Confirmed',
+        data: items.map(item => ({
+          x: item.Date,
+          y: item.Confirmed
+        })),
       },
       {
-        label: 'Series 2',
-        data: [
-          { x: 1, y: 16 },
-          { x: 2, y: 32 },
-          { x: 3, y: 640 },
-        ],
+        label: 'Recovered',
+        data: items.map(item => ({
+          x: item.Date,
+          y: item.Recovered
+        })),
       },
       {
-        label: 'Series 3',
-        data: [
-          { x: 1, y: 10 },
-          { x: 2, y: 40 },
-          { x: 3, y: 10 },
-        ],
+        label: 'Deaths',
+        data: items.map(item => ({
+          x: item.Date,
+          y: item.Deaths
+        })),
+      },
+      {
+        label: 'Actives',
+        data: items.map(item => ({
+          x: item.Date,
+          y: item.Active
+        })),
       },
     ],
-    []
+    [props.data]
   )
 
   const axes = React.useMemo(
     () => [
-      { primary: true, type: 'linear', position: 'bottom' },
+      { primary: true, type: 'time', position: 'bottom' },
       { type: 'linear', position: 'left' },
     ],
+    []
+  )
+
+  const series = useMemo(
+    () => ({
+      showPoints: false
+    }),
+    []
+  )
+
+  const primaryCursor = useMemo(
+    () => ({
+      render: props => (
+        <span>
+          {new Date(props.value).toDateString()}
+        </span>
+      )
+    }),
+    []
+  )
+
+  const colorPalette = {
+    "Confirmed": color.toHSL(color.RED),
+    "Recovered": color.toHSL(color.GREEN),
+    "Deaths": color.toHSL(color.GRAY),
+    "Actives": color.toHSL(color.ORANGE),
+  };
+
+  const getSeriesStyle = useCallback(
+    (series) => ({
+      transition: 'all .5s ease',
+      fill: colorPalette[series.label],
+      color: colorPalette[series.label],
+    }),
+    []
+  )
+
+  const getDatumStyle = useCallback(
+    () => ({
+      transition: 'all .5s ease',
+    }),
     []
   )
 
@@ -182,10 +230,19 @@ function MyChart() {
     <div
       style={{
         width: '100%',
-        height: '400px',
+        height: '50vh',
       }}
     >
-      <Chart data={data} axes={axes} dark />
+      <Chart
+        dark
+        tooltip
+        primaryCursor={primaryCursor}
+        data={data}
+        axes={axes}
+        series={series}
+        getSeriesStyle={getSeriesStyle}
+        getDatumStyle={getDatumStyle}
+      />
     </div>
   )
 }
