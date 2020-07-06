@@ -34,7 +34,6 @@
   }
 }
 
-
 header {
   grid-area: header;
   padding: var(--size-m) var(--size-m);
