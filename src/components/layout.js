@@ -4,7 +4,7 @@ import Header from "./header"
 import BottomNavigation from "./bottomNavigation"
 import useScreen, { screenType } from "../hooks/useScreen"
 
-const Sidebar = dynamic(() => import("./Sidebar"), { ssr: false })
+const Sidebar = dynamic(() => import("./sidebar"), { ssr: false })
 
 export default function Layout({ children }) {
   const screen = useScreen()
