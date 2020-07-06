@@ -1,4 +1,8 @@
 :root {
+  --screen-phone: 600px;
+  --screen-table: 1200px;
+  --screen-desktop: 1920px;
+
   /* https://www.w3schools.com/tags/ref_pxtoemconversion.asp */
   --size-xs: 0.25rem;
   --size-s: 0.5rem;
@@ -23,7 +27,7 @@
   --text-primary: hsl(0, 0%, 75%);
   --text-secondary: hsl(0, 0%, 62%);
 
-  --color-primary: hsl(188, 89%, 37%);
+  --color-primary: hsl(188, 89%, 27%);
   --color-secondary: hsl(39, 89%, 37%);
   --color-accent: hsl(48, 100%, 50%);
   --color-warning: hsl(358, 57%, 50%);
@@ -59,7 +63,7 @@
   --text-primary: hsl(0, 0%, 20%);
   --text-secondary: hsl(0, 0%, 40%);
 
-  --color-primary: hsl(188, 89%, 37%);
+  --color-primary: hsl(188, 89%, 25%);
   --color-secondary: hsl(39, 89%, 37%);
   --color-accent: hsl(48, 100%, 50%);
   --color-warning: hsl(358, 57%, 50%);
@@ -120,22 +124,6 @@ body {
   height: 100vh;
 }
 
-header {
-  padding: var(--size-m) var(--size-m);
-}
-
-aside {
-  width: clamp(320px, 20vw, 400px);
-  height: calc(100vh - calc(var(--size-m) * 2));
-  overflow: auto;
-  border-right: 1px solid var(--color-border-soft);
-}
-
-main {
-  overflow: auto;
-  height: calc(100vh - calc(var(--size-m) * 2));
-}
-
 h1 {
   font-size: 48px;
   font-weight: 400;
@@ -148,17 +136,6 @@ input[type=text] {
   background-color: transparent;
   border: none;
   box-shadow: 0px 0px 0px 1px var(--color-deep-2);
-}
-
-body.popup .root {
-  width: var(--view-width);
-  height: 385px;
-  max-height: 385px;
-  overflow: auto;
-  margin: auto;
-  background-color: var(--color-deep-0);
-  display: flex;
-  flex-direction: column;
 }
 
 a {
@@ -190,7 +167,7 @@ button:active {
   100% { opacity: 0.5; }
 }
 
-ul { list-style-type: none; }
+ul, ol { list-style-type: none; }
 
 kbd {
   font-family: inherit;
@@ -328,6 +305,10 @@ input[type=text]:focus {
 .background-interactive { background-color: var(--color-interactive-soft); }
 .background-interactive:hover { background-color: var(--color-interactive-soft-hover); }
 
+.backdrop-blur {
+  backdrop-filter: blur(10px);
+}
+
 /* LAYOUTS */
 .block { display: block; }
 .flex { display: flex; }
@@ -419,6 +400,9 @@ input[type=text]:focus {
 .border-s { border: 1px solid; }
 .border-m { border: 2px solid; }
 .border-l { border: 3px solid; }
+.border-top-s { border-top: 1px solid; }
+.border-top-m { border-top: 2px solid; }
+.border-top-l { border-top: 3px solid; }
 .border-bottom-s { border-bottom: 1px solid; }
 .border-bottom-m { border-bottom: 2px solid; }
 .border-bottom-l { border-bottom: 3px solid; }

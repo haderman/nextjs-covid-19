@@ -19,9 +19,7 @@ function Sidebar() {
       <Stack size={size.XL}>
         <GlobalSummary summary={summary} />
       </Stack>
-      <Stack size={size.XL}>
-        <ListCountries />
-      </Stack>
+      <ListCountries />
     </aside>
   )
 }
