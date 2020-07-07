@@ -6,7 +6,7 @@ import { useMemo, useCallback } from "react"
 import useWorldTotalData from "../hooks/useWorldTotalData"
 import useSummaryData from "../hooks/useSummaryData"
 import Stack from "../components/common/stack"
-import Summary from "../components/common/summary"
+import useScreen, { screenType } from "../hooks/useScreen"
 import * as size from "../utils/size"
 import * as color from "../utils/color"
 import api from "../utils/api"
@@ -15,10 +15,17 @@ const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),
   { ssr: false }
 )
+const SummaryCompact = dynamic(
+  () => import("../components/common/summary").then(mod => mod.Compact),
+  { ssr: false }
+)
 
 export default function Home() {
   const { status, data } = useWorldTotalData()
   const summary = useSummaryData()
+  const screen = useScreen()
+
+  const isSummaryCompactVisible = screen === screenType.PHONE || screen === screenType.TABLET
 
   return (
     <>
@@ -28,9 +35,9 @@ export default function Home() {
       <Stack size={size.XL}>
         <h3>Global</h3>
       </Stack>
-      {summary.status === api.requestStatus.SUCCESS &&
+      {isSummaryCompactVisible && summary.status === api.requestStatus.SUCCESS &&
         <Stack size={size.XL}>
-          <Summary.Compact data={summary.data.global} />
+          <SummaryCompact data={summary.data.global} />
         </Stack>
       }
       <Stack size={size.XL}>

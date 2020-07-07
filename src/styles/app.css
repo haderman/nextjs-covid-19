@@ -18,6 +18,7 @@
 
 @media screen and (min-width: 1200px) {
   .layout {
+    height: 100vh;
     grid-template-rows: 60px auto;
     grid-template-columns: clamp(320px, 20vw, 400px) 3fr;
     grid-template-areas:
@@ -25,7 +26,6 @@
       "sidebar main"
   }
 
-  body { overflow: hidden; }
   aside, main { overflow: auto; }
 }
 

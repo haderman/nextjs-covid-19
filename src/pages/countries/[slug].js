@@ -54,14 +54,12 @@ export default function Country({ slug, data }) {
           : <SummaryCards data={country} />
         }
       </Stack>
-      <Stack size={size.XL}>
-        <section>
-          <Stack size={size.M}>
-            <h4>Spread over time</h4>
-          </Stack>
-          <MyChart data={data || []} />
-        </section>
-      </Stack>
+      <section>
+        <Stack size={size.M}>
+          <h4>Spread over time</h4>
+        </Stack>
+        <MyChart data={data || []} />
+      </section>
     </>
   )
 }
