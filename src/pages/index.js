@@ -4,7 +4,9 @@ import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
 import useWorldTotalData from "../hooks/useWorldTotalData"
+import useSummaryData from "../hooks/useSummaryData"
 import Stack from "../components/common/stack"
+import Summary from "../components/common/summary"
 import * as size from "../utils/size"
 import * as color from "../utils/color"
 import api from "../utils/api"
@@ -16,6 +18,7 @@ const Chart = dynamic(() =>
 
 export default function Home() {
   const { status, data } = useWorldTotalData()
+  const summary = useSummaryData()
 
   return (
     <>
@@ -25,6 +28,11 @@ export default function Home() {
       <Stack size={size.XL}>
         <h3>Global</h3>
       </Stack>
+      {summary.status === api.requestStatus.SUCCESS &&
+        <Stack size={size.XL}>
+          <Summary.Compact data={summary.data.global} />
+        </Stack>
+      }
       <Stack size={size.XL}>
         {status === api.requestStatus.SUCCESS && <MyChart data={data} />}
       </Stack>

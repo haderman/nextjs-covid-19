@@ -1,8 +1,9 @@
-:root {
-  --screen-phone: 600px;
-  --screen-table: 1200px;
-  --screen-desktop: 1920px;
+/*
+--screen-phone: 600px;
+--screen-table: 1200px;
+--screen-desktop: 1920px; */
 
+:root {
   /* https://www.w3schools.com/tags/ref_pxtoemconversion.asp */
   --size-xs: 0.25rem;
   --size-s: 0.5rem;
@@ -90,6 +91,16 @@
   --color-border-strong: hsl(0, 0%, 85%);
 }
 
+@media screen and (max-width: 1200px) {
+  :root {
+    --size-xs: 0.1875rem;
+    --size-s: 0.3125rem;
+    --size-m: 0.5rem;
+    --size-l: 0.8125rem;
+    --size-xl: 1.3125rem;
+  }
+}
+
 .compact {
   --size-xs: 0.1875rem;
   --size-s: 0.3125rem;
@@ -121,8 +132,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-  height: 100vh;
+  background-color: var(--color-deep-0);
 }
 
 h1 {

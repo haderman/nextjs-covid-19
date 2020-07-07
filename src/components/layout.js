@@ -10,7 +10,7 @@ export default function Layout({ children }) {
   const screen = useScreen()
 
   return (
-    <div className="layout theme-dark background-deep-0 full-height text-primary">
+    <div className="layout theme-dark background-deep-0 text-primary">
       <Header />
       {(screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP) && <Sidebar />}
       <main className="squish-inset-l">{children}</main>

@@ -1,5 +1,6 @@
 .layout {
-  height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
   width: 100vw;
   display: grid;
   grid-gap: var(--grid-gap-m);
@@ -10,13 +11,8 @@
 --screen-desktop: 1920px; */
 @media screen and (max-width: 1200px) {
   .layout {
-    overflow: auto;
-    grid-template-columns: 1fr;
-    grid-template-rows: 60px auto 52px;
-    grid-template-areas:
-      "header"
-      "main"
-      "bottomNav";
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -29,9 +25,12 @@
       "sidebar main"
   }
 
-  aside, main {
-    overflow: auto;
-  }
+  body { overflow: hidden; }
+  aside, main { overflow: auto; }
+}
+
+html {
+  height: -webkit-fill-available;
 }
 
 header {
