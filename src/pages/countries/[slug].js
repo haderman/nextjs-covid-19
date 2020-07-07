@@ -4,21 +4,13 @@ import { useMemo, useCallback } from "react"
 
 import Stack from "../../components/common/stack"
 import useSummaryData from "../../hooks/useSummaryData"
-import useScreen, { screenType } from "../../hooks/useScreen"
+import Summary from "../../components/common/summary"
 import api from "../../utils/api"
 import * as size from '../../utils/size'
 import * as color from "../../utils/color"
 
 const Chart = dynamic(
   () => import("react-charts").then(mod => mod.Chart),
-  { ssr: false }
-)
-const SummaryCompact = dynamic(
-  () => import("../../components/common/summary").then(mod => mod.Compact),
-  { ssr: false }
-)
-const SummaryCards = dynamic(
-  () => import("../../components/common/summary").then(mod => mod.Cards),
   { ssr: false }
 )
 
@@ -29,7 +21,6 @@ export async function getServerSideProps({ params: { slug } }) {
 
 export default function Country({ slug, data }) {
   const summary = useSummaryData()
-  const screen = useScreen()
 
   if (summary.status === api.requestStatus.LOADING) {
     return <Skeleton />
@@ -49,10 +40,7 @@ export default function Country({ slug, data }) {
         <h3>{country.Country}</h3>
       </Stack>
       <Stack size={size.XL}>
-        {screen === screenType.PHONE || screen === screenType.TABLET
-          ? <SummaryCompact data={country} />
-          : <SummaryCards data={country} />
-        }
+        <Summary.Cards data={country} />
       </Stack>
       <section>
         <Stack size={size.M}>

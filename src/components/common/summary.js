@@ -82,43 +82,35 @@ Cards.propTypes = {
 
 export function Cards({ data }) {
   return (
-    <section className="flex flex-children-1">
-      <Inline size={size.M}>
-        <Card
-          topText="Total confirmed cases"
-          middleText={data.TotalConfirmed}
-          middleTextColor={color.RED}
-          bottomText={data.NewConfirmed}
-          bottomTextColor={color.RED_SOFT}
-        />
-      </Inline>
-      <Inline size={size.M}>
-        <Card
-          topText="Active cases"
-          middleText={data.TotalConfirmed - data.TotalRecovered - data.TotalDeaths}
-          middleTextColor={color.ORANGE}
-          bottomText={data.NewConfirmed - data.NewRecovered - data.NewDeaths}
-          bottomTextColor={color.ORANGE_SOFT}
-        />
-      </Inline>
-      <Inline size={size.M}>
-        <Card
-          topText="Recovered cases"
-          middleText={data.TotalRecovered}
-          middleTextColor={color.GREEN}
-          bottomText={data.NewRecovered}
-          bottomTextColor={color.GREEN_SOFT}
-        />
-      </Inline>
-      <Inline>
-        <Card
-          topText="Total deaths cases"
-          middleText={data.TotalDeaths}
-          middleTextColor={color.GRAY}
-          bottomText={data.NewDeaths}
-          bottomTextColor={color.GRAY_SOFT}
+    <section className="layout-summary-cards">
+      <Card
+        topText="Confirmed cases"
+        middleText={data.TotalConfirmed}
+        middleTextColor={color.RED}
+        bottomText={data.NewConfirmed}
+        bottomTextColor={color.RED_SOFT}
       />
-      </Inline>
+      <Card
+        topText="Active cases"
+        middleText={data.TotalConfirmed - data.TotalRecovered - data.TotalDeaths}
+        middleTextColor={color.ORANGE}
+        bottomText={data.NewConfirmed - data.NewRecovered - data.NewDeaths}
+        bottomTextColor={color.ORANGE_SOFT}
+      />
+      <Card
+        topText="Recovered cases"
+        middleText={data.TotalRecovered}
+        middleTextColor={color.GREEN}
+        bottomText={data.NewRecovered}
+        bottomTextColor={color.GREEN_SOFT}
+      />
+      <Card
+        topText="Deaths cases"
+        middleText={data.TotalDeaths}
+        middleTextColor={color.GRAY}
+        bottomText={data.NewDeaths}
+        bottomTextColor={color.GRAY_SOFT}
+      />
     </section>
   )
 }

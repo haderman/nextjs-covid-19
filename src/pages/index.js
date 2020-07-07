@@ -15,8 +15,8 @@ const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),
   { ssr: false }
 )
-const SummaryCompact = dynamic(
-  () => import("../components/common/summary").then(mod => mod.Compact),
+const SummaryCards = dynamic(
+  () => import("../components/common/summary").then(mod => mod.Cards),
   { ssr: false }
 )
 
@@ -37,7 +37,7 @@ export default function Home() {
       </Stack>
       {isSummaryCompactVisible && summary.status === api.requestStatus.SUCCESS &&
         <Stack size={size.XL}>
-          <SummaryCompact data={summary.data.global} />
+          <SummaryCards data={summary.data.global} />
         </Stack>
       }
       <Stack size={size.XL}>
