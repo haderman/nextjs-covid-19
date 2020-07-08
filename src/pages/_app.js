@@ -1,10 +1,10 @@
 // https://nextjs.org/docs/advanced-features/custom-app
 
-import Layout from "../components/layout"
-import AppState from "../components/contexts/appState"
-import api from "../utils/api"
-import "../styles/global.css"
-import "../styles/app.css"
+import Layout from "components/layout"
+import AppState from "components/contexts/appState"
+import api from "utils/api"
+import "styles/global.css"
+import "styles/app.css"
 
 function App({ Component, pageProps, countries }) {
   const store = { countries }

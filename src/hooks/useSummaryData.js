@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import api from "../utils/api"
+import api from "utils/api"
 
 export default function useSummaryData() {
   const swrResponse = useSWR("/summary", api.getSummary)

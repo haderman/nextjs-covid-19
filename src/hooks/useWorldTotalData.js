@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import api from "../utils/api"
+import api from "utils/api"
 
 export default function useWorldTotalData() {
   const swrResponse = useSWR("/total/world", api.getWorldTotal)

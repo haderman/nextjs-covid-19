@@ -3,13 +3,13 @@ import Link from "next/link"
 import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
-import useWorldTotalData from "../hooks/useWorldTotalData"
-import useSummaryData from "../hooks/useSummaryData"
-import Stack from "../components/common/stack"
-import useScreen, { screenType } from "../hooks/useScreen"
-import * as size from "../utils/size"
-import * as color from "../utils/color"
-import api from "../utils/api"
+import useWorldTotalData from "hooks/useWorldTotalData"
+import useSummaryData from "hooks/useSummaryData"
+import Stack from "components/common/stack"
+import useScreen, { screenType } from "hooks/useScreen"
+import * as size from "utils/size"
+import * as color from "utils/color"
+import api from "utils/api"
 
 const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),

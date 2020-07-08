@@ -1,4 +1,4 @@
-import * as size from "../../utils/size"
+import * as size from "utils/size"
 
 function Inline({ size, children }) {
   const className = size ? `inline-${size}` : ""

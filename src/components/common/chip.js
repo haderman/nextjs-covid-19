@@ -1,5 +1,5 @@
-import * as size from "../../utils/size"
-import * as color from "../../utils/color"
+import * as size from "utils/size"
+import * as color from "utils/color"
 
 function Chip({ children, size, rounded, background, color }) {
   const styles = [

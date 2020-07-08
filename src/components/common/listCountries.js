@@ -3,13 +3,13 @@ import { useRouter } from 'next/router'
 import classnames from 'classnames'
 
 import { useAppState } from "../contexts/appState"
-import useSummaryData from "../../hooks/useSummaryData"
+import useSummaryData from "hooks/useSummaryData"
 import Stack from "./stack"
 import Chip from "./chip"
 import Numeric from "./numeric"
-import * as size from "../../utils/size"
-import * as color from "../../utils/color"
-import api from "../../utils/api"
+import * as size from "utils/size"
+import * as color from "utils/color"
+import api from "utils/api"
 
 export default function ListCountries() {
   const { countries } = useAppState()

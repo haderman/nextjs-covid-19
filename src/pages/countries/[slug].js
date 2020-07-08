@@ -2,12 +2,12 @@ import Head from 'next/head'
 import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
-import Stack from "../../components/common/stack"
-import useSummaryData from "../../hooks/useSummaryData"
-import Summary from "../../components/common/summary"
-import api from "../../utils/api"
-import * as size from '../../utils/size'
-import * as color from "../../utils/color"
+import Stack from "components/common/stack"
+import useSummaryData from "hooks/useSummaryData"
+import Summary from "components/common/summary"
+import api from "utils/api"
+import * as size from 'utils/size'
+import * as color from "utils/color"
 
 const Chart = dynamic(
   () => import("react-charts").then(mod => mod.Chart),

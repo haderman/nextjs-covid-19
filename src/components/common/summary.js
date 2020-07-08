@@ -5,8 +5,8 @@ import Inline from "./inline"
 import Chip from "./chip"
 import Numeric from "./numeric"
 
-import * as size from "../../utils/size"
-import * as color from "../../utils/color"
+import * as size from "utils/size"
+import * as color from "utils/color"
 
 const dataShape = {
   TotalConfirmed: PropTypes.number,

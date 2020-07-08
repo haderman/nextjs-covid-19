@@ -1,4 +1,4 @@
-import * as size from "../../utils/size"
+import * as size from "utils/size"
 
 // TODO: create "as" prop to render the component as the param e.g as li, div, etc
 
