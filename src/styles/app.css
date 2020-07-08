@@ -18,10 +18,23 @@ main {
 
 nav {
   grid-area: bottomNav;
+  height: 44px;
+}
+
+nav ol {
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 nav .selected {
   background-color: var(--color-primary);
+}
+
+svg.icon {
+  width: 24px;
+  height: 24px;
+  fill: white
 }
 
 .layout {
@@ -54,6 +67,8 @@ desktop: 1920px;
     grid-template-columns: 1fr 1fr;
     grid-gap: var(--size-s);
   }
+
+  main { flex: 1; }
 }
 
 @media screen and (min-width: 1200px) {
