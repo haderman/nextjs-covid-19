@@ -28,7 +28,7 @@
   --text-primary: hsl(0, 0%, 75%);
   --text-secondary: hsl(0, 0%, 62%);
 
-  --color-primary: hsl(188, 89%, 27%);
+  --color-primary: hsl(188, 89%, 49%);
   --color-secondary: hsl(39, 89%, 37%);
   --color-accent: hsl(48, 100%, 50%);
   --color-warning: hsl(358, 57%, 50%);
@@ -46,13 +46,13 @@
   --color-gray: hsl(0, 0%, 46%);
   --color-gray-soft: hsla(221, 14%, 68%, 0.2);
 
-  --color-deep-0: hsl(0, 0%, 7%);
-  --color-deep-1: hsl(0, 0%, 9%);
-  --color-deep-2: hsl(240, 2%, 22%);
-  --color-deep-3: hsl(240, 1%, 27%);
-  --color-deep-4: hsl(240, 1%, 33%);
-  --color-deep-5: hsl(240, 2%, 49%);
-  --color-deep-6: hsl(240, 3%, 69%);
+  --color-deep-0: black;
+  --color-deep-1: hsla(210, 20%, 5%, 1); /*hsl(0, 0%, 7%); */
+  --color-deep-2: hsl(0, 0%, 9%);
+  --color-deep-3: hsl(240, 2%, 22%);
+  --color-deep-4: hsl(240, 1%, 27%);
+  --color-deep-5: hsl(240, 1%, 33%);
+  --color-deep-6: hsl(240, 2%, 49%);
 
   --color-border-soft: hsl(0, 0%, 16%);
   --color-border-strong: hsl(0, 0%, 16%);
@@ -132,7 +132,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-deep-0);
+  background-color: var(--color-deep-1);
 }
 
 h1 {

@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import WorldwideIcon from "../svg/worldwide.svg"
 import ListIcon from "../svg/list-1.svg"
 import InfoIcon from "../svg/info.svg"
+import StarIcon from "../svg/star.svg"
 
 export default function BottomNavigation() {
   const router = useRouter()
@@ -27,6 +28,13 @@ export default function BottomNavigation() {
           <Link href="/countries" passHref>
             <a className={aClassNames("/countries")}>
               <ListIcon className="icon" />
+            </a>
+          </Link>
+        </li>
+        <li className="flex-1 full-height">
+          <Link href="/favorites" passHref>
+            <a className={aClassNames("/favorites")}>
+              <StarIcon className="icon" />
             </a>
           </Link>
         </li>

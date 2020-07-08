@@ -27,8 +27,8 @@ nav ol {
   align-items: center;
 }
 
-nav .selected {
-  background-color: var(--color-primary);
+nav .selected svg.icon{
+  fill: var(--color-primary);
 }
 
 svg.icon {
