@@ -11,7 +11,7 @@
   --size-l: 1.5rem;
   --size-xl: 2rem;
 
-  --text-size-xs: 0.7rem;
+  --text-size-xs: 0.8125rem;
   --text-size-s: 0.9rem;
   --text-size-m: 1rem;
   --text-size-l: 1.5rem;
@@ -23,10 +23,8 @@
   --border-radious-size-l: 12px;
   --border-radious-size-xl: 16px;
 
-  --saturation: 50%;
-  --lightness: 40%;
-  --text-primary: hsl(0, 0%, 75%);
-  --text-secondary: hsl(0, 0%, 62%);
+  --text-primary: hsl(0, 0%, 90%);
+  --text-secondary: hsl(0, 0%, 70%);
 
   --color-primary: hsl(188, 89%, 49%);
   --color-secondary: hsl(39, 89%, 37%);
@@ -46,8 +44,8 @@
   --color-gray: hsl(0, 0%, 46%);
   --color-gray-soft: hsla(221, 14%, 68%, 0.2);
 
-  --color-deep-0: black;
-  --color-deep-1: hsla(210, 20%, 5%, 1); /*hsl(0, 0%, 7%); */
+  --color-deep-0: hsla(210, 20%, 5%, 1); /*hsl(0, 0%, 7%); */
+  --color-deep-1: black;
   --color-deep-2: hsl(0, 0%, 9%);
   --color-deep-3: hsl(240, 2%, 22%);
   --color-deep-4: hsl(240, 1%, 27%);
@@ -477,3 +475,5 @@ input[type=text]:focus {
 .flex-children-1 > * {
   flex: 1;
 }
+
+h1, h2, h3, h4 { color: var(--text-secondary); }

@@ -1,49 +1,42 @@
-import Link from "next/link"
-import { useRouter } from 'next/router'
-import classnames from 'classnames'
-
+import ActiveLink from "./common/activeLink"
 import WorldwideIcon from "../svg/worldwide.svg"
 import ListIcon from "../svg/list-1.svg"
 import InfoIcon from "../svg/info.svg"
 import StarIcon from "../svg/star.svg"
 
 export default function BottomNavigation() {
-  const router = useRouter()
-
-  const aClassNames = href => {
-    return classnames("full-height flex justify-center align-center", { selected: router.pathname === href })
-  }
+  const aClassNames = "full-height flex justify-center align-center"
 
   return (
     <nav className="sticky-bottom background-deep-0 border-top-s border-color-strong">
       <ol className="flex">
         <li className="flex-1 full-height">
-          <Link href="/" passHref>
-            <a className={aClassNames("/")}>
+          <ActiveLink href="/" passHref activeClassName="selected">
+            <a className={aClassNames}>
               <WorldwideIcon className="icon" />
             </a>
-          </Link>
+          </ActiveLink>
         </li>
         <li className="flex-1 full-height">
-          <Link href="/countries" passHref>
-            <a className={aClassNames("/countries")}>
+          <ActiveLink href="/countries" passHref activeClassName="selected" isAciveInSubpaths>
+            <a className={aClassNames}>
               <ListIcon className="icon" />
             </a>
-          </Link>
+          </ActiveLink>
         </li>
         <li className="flex-1 full-height">
-          <Link href="/favorites" passHref>
-            <a className={aClassNames("/favorites")}>
+          <ActiveLink href="/favorites" passHref activeClassName="selected">
+            <a className={aClassNames}>
               <StarIcon className="icon" />
             </a>
-          </Link>
+          </ActiveLink>
         </li>
         <li className="flex-1 full-height">
-          <Link href="/about" passHref>
-            <a className={aClassNames("/about")}>
+          <ActiveLink href="/about" passHref activeClassName="selected">
+            <a className={aClassNames}>
               <InfoIcon className="icon" />
             </a>
-          </Link>
+          </ActiveLink>
         </li>
       </ol>
     </nav>

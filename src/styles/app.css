@@ -31,6 +31,12 @@ nav .selected svg.icon{
   fill: var(--color-primary);
 }
 
+svg.icon-s {
+  width: 18px;
+  height: 18px;
+  fill: white
+}
+
 svg.icon {
   width: 24px;
   height: 24px;
@@ -69,6 +75,11 @@ desktop: 1920px;
   }
 
   main { flex: 1; }
+
+  .icon-button {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 @media screen and (min-width: 1200px) {

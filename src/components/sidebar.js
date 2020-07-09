@@ -1,5 +1,4 @@
-import Link from 'next/link'
-
+import ActiveLinke from "./common/activeLink"
 import Stack from "./common/stack"
 import Chip from "./common/chip"
 import Numeric from "./common/numeric"
@@ -15,7 +14,7 @@ function Sidebar() {
   const summary = useSummaryData()
 
   return (
-    <aside className="background-deep-1 inset-m">
+    <aside className="background-deep-0 inset-m">
       <Stack size={size.XL}>
         <GlobalSummary summary={summary} />
       </Stack>
@@ -41,11 +40,11 @@ function GlobalSummary({ summary }) {
               Updated <time>{prettyDate(summary.data.date)}</time>
             </span>
           </Stack>
-          <Link href="/" passHref>
+          <ActiveLinke href="/" passHref activeClassName="background-deep-1">
             <a>
               <Summary.Compact data={summary.data.global} />
             </a>
-          </Link>
+          </ActiveLinke>
         </>
       :null
       }
