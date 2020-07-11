@@ -9,12 +9,12 @@ import * as size from "utils/size"
 import * as color from "utils/color"
 
 const dataShape = {
-  TotalConfirmed: PropTypes.number,
-  NewConfirmed: PropTypes.number,
-  TotalRecovered: PropTypes.number,
-  NewRecovered: PropTypes.number,
-  TotalDeaths: PropTypes.number,
-  NewDeaths: PropTypes.number,
+  confirmed: PropTypes.number,
+  newConfirmed: PropTypes.number,
+  recovered: PropTypes.number,
+  newRecovered: PropTypes.number,
+  deaths: PropTypes.number,
+  newDeaths: PropTypes.number,
 }
 
 Compact.propTypes = {
@@ -30,10 +30,10 @@ export function Compact({ data }) {
       <Stack size={size.L}>
         <div className="flex justify-space-between align-center">
           <h3 className="text-red text-xl">
-            <Numeric value={data.TotalConfirmed} />
+            <Numeric value={data.confirmed} />
           </h3>
           <Chip rounded={size.L} background={color.RED_SOFT} size={size.S}>
-            + <Numeric value={data.NewConfirmed} />
+            + <Numeric value={data.newConfirmed} />
           </Chip>
         </div>
       </Stack>
@@ -41,34 +41,34 @@ export function Compact({ data }) {
         {/* row 1 */}
         <span className="text-secondary">Actives</span>
         <Numeric
-          value={data.TotalConfirmed - data.TotalRecovered - data.TotalDeaths}
+          value={data.confirmed - data.recovered - data.deaths}
           className="text-orange text-end"
         />
         <span className="text-end">
           <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
-            + <Numeric value={data.NewConfirmed} />
+            + <Numeric value={data.newConfirmed} />
           </Chip>
         </span>
         {/* row 2 */}
         <span className="text-secondary">Recovered</span>
         <Numeric
-          value={data.TotalRecovered}
+          value={data.recovered}
           className="text-green text-end"
         />
         <span className="text-end">
           <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
-            + <Numeric value={data.NewRecovered} />
+            + <Numeric value={data.newRecovered} />
           </Chip>
         </span>
         {/* row 3 */}
         <span className="text-secondary">Deaths</span>
         <Numeric
-          value={data.TotalDeaths}
+          value={data.deaths}
           className="text-gray text-end"
         />
         <span className="text-end">
           <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
-            + <Numeric value={data.NewDeaths} />
+            + <Numeric value={data.newDeaths} />
           </Chip>
         </span>
       </div>
@@ -85,30 +85,30 @@ export function Cards({ data }) {
     <section className="layout-summary-cards">
       <Card
         topText="Confirmed cases"
-        middleText={data.TotalConfirmed}
+        middleText={data.confirmed}
         middleTextColor={color.RED}
-        bottomText={data.NewConfirmed}
+        bottomText={data.newConfirmed}
         bottomTextColor={color.RED_SOFT}
       />
       <Card
         topText="Active cases"
-        middleText={data.TotalConfirmed - data.TotalRecovered - data.TotalDeaths}
+        middleText={data.confirmed - data.recovered - data.deaths}
         middleTextColor={color.ORANGE}
-        bottomText={data.NewConfirmed - data.NewRecovered - data.NewDeaths}
+        bottomText={data.newConfirmed - data.newRecovered - data.newDeaths}
         bottomTextColor={color.ORANGE_SOFT}
       />
       <Card
         topText="Recovered cases"
-        middleText={data.TotalRecovered}
+        middleText={data.recovered}
         middleTextColor={color.GREEN}
-        bottomText={data.NewRecovered}
+        bottomText={data.newRecovered}
         bottomTextColor={color.GREEN_SOFT}
       />
       <Card
         topText="Deaths cases"
-        middleText={data.TotalDeaths}
+        middleText={data.deaths}
         middleTextColor={color.GRAY}
-        bottomText={data.NewDeaths}
+        bottomText={data.newDeaths}
         bottomTextColor={color.GRAY_SOFT}
       />
     </section>

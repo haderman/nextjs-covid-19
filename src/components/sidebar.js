@@ -1,48 +1,52 @@
+import useGlobalSummary from "api/hooks/useGlobalSummary"
+import api from "api/api"
+import * as size from "utils/size"
+import prettyDate from "utils/prettyDate"
 import ActiveLinke from "./common/activeLink"
 import Stack from "./common/stack"
-import Chip from "./common/chip"
-import Numeric from "./common/numeric"
 import Summary from "./common/summary"
 import ListCountries from "./common/listCountries"
-import useSummaryData from "../hooks/useSummaryData"
-
-import api from "../utils/api"
-import * as size from "../utils/size"
-import prettyDate from "../utils/prettyDate"
 
 function Sidebar() {
-  const summary = useSummaryData()
+  const globalSummary = useGlobalSummary()
 
   return (
     <aside className="background-deep-0 inset-m">
       <Stack size={size.XL}>
-        <GlobalSummary summary={summary} />
+        {api.isLoading(globalSummary) ?
+          <div>loading</div>
+        :api.isError(globalSummary) ?
+          <div>error</div>
+        :api.isSuccess(globalSummary) ?
+          <GlobalCount summary={globalSummary} />
+        :null
+        }
       </Stack>
       <ListCountries />
     </aside>
   )
 }
 
-function GlobalSummary({ summary }) {
+function GlobalCount({ summary }) {
   return (
     <section>
-      {summary.status === api.requestStatus.ERROR ?
+      {api.isError(summary) ?
         <h2 className="text-error">Error...</h2>
-      :summary.status === api.requestStatus.LOADING ?
+      :api.isLoading(summary) ?
         <h2>Loading...</h2>
-      :summary.status === api.requestStatus.SUCCESS ?
+      :api.isSuccess(summary) ?
         <>
           <Stack size={size.XS}>
             <h3>Global cases</h3>
           </Stack>
-          <Stack size={size.M}>
+          {/* <Stack size={size.M}>
             <span className="text-secondary text-s">
-              Updated <time>{prettyDate(summary.data.date)}</time>
+              Updated <time>{prettyDate(summary.data)}</time>
             </span>
-          </Stack>
+          </Stack> */}
           <ActiveLinke href="/" passHref activeClassName="background-deep-1">
             <a>
-              <Summary.Compact data={summary.data.global} />
+              <Summary.Compact data={api.getResult(summary)} />
             </a>
           </ActiveLinke>
         </>

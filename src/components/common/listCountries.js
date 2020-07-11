@@ -1,17 +1,18 @@
 import { useAppState } from "../contexts/appState"
-import useSummaryData from "hooks/useSummaryData"
+import useGlobalLatestData from "api/hooks/useGlobalLatestData"
 import ActiveLink from "./activeLink"
 import Stack from "./stack"
 import Chip from "./chip"
 import Numeric from "./numeric"
 import * as size from "utils/size"
 import * as color from "utils/color"
-import api from "utils/api"
+import api from "api/api"
 import StarIcon from "../../svg/star.svg"
+import Inline from "./inline"
 
 export default function ListCountries() {
-  const { countries } = useAppState()
-  const summary = useSummaryData()
+  const { countryNameToIso, countryNameToFlag } = useAppState()
+  const latestInfoByCountry = useGlobalLatestData()
 
   return (
     <section className="clean-last-stack">
@@ -19,17 +20,24 @@ export default function ListCountries() {
         <h3>Countries</h3>
       </Stack>
       <ul>
-        {countries
-          .map(country => summary.data?.countriesMap?.[country.Slug])
-          .filter(countryInfo => countryInfo !== undefined && countryInfo.TotalConfirmed !== 0)
-          .sort((a, b) => b.NewConfirmed - a.NewConfirmed)
-          .map(countryInfo => {
-            return (
-              <Stack key={countryInfo.Country} size={size.S} as="li">
-                <DetailRow status={summary.status} country={countryInfo} />
-              </Stack>
-            )
+        {Object
+          .entries(countryNameToIso)
+          .map(([name, iso]) => {
+            const flag = countryNameToFlag?.[name]?.flag ?? "🏳️"
+            const stats = api.getResult(latestInfoByCountry)?.[iso] ?? "#"
+            return {
+              iso,
+              name,
+              flag,
+              ...stats
+            }
           })
+          .sort((a, b) => (b.confirmed || 0) - (a.confirmed || 0))
+          .map(country =>
+            <Stack key={country.name} size={size.S} as="li">
+              <DetailRow country={country} />
+            </Stack>
+          )
         }
       </ul>
     </section>
@@ -40,12 +48,12 @@ function CompactRow({ status, country }) {
   return (
     <ActiveLink
       passHref
-      href="/countries/[slug]"
-      as={`/countries/${country.Slug}`}
+      href="/countries/[iso]"
+      as={`/countries/${country.iso}`}
       activeClassName="background-interactive-selected"
     >
       <a className="flex justify-space-between align-center inset-s border-s border-color-strong rounded-s background-interactive">
-        <span className="text-m">{country.Country}</span>
+        <span className="text-m">{country.name}</span>
         {status === api.requestStatus.LOADING ?
           <span className="skeleton">
             <Chip size={size.M}>000</Chip>
@@ -56,7 +64,7 @@ function CompactRow({ status, country }) {
             rounded={size.XL}
             background={color.DEEP_0}
           >
-            + <Numeric value={country.NewConfirmed} />
+            <Numeric value={country.NewConfirmed} />
           </Chip>
         :null
         }
@@ -65,7 +73,7 @@ function CompactRow({ status, country }) {
   )
 }
 
-function DetailRow({ status, country }) {
+function DetailRow({ country }) {
   const handleOnClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -75,23 +83,28 @@ function DetailRow({ status, country }) {
   return (
     <ActiveLink
       passHref
-      href="/countries/[slug]"
-      as={`/countries/${country.Slug}`}
+      href="/countries/[iso]"
+      as={`/countries/${country.iso}`}
       activeClassName="background-interactive-selected"
     >
       <a className="flex justify-space-between align-center stretch-inset-m rounded">
-        <span>
+        <Inline size={size.L}>
+          <span className="text-l">
+            {country.flag}
+          </span>
+        </Inline>
+        <span className="text-left flex-1">
           <Stack size={size.S}>
-            <p className="text-m">{country.Country}</p>
+            <p className="text-m">{country.name}</p>
           </Stack>
           <span className="text-xs text-secondary">
-            <span>New cases </span>
+            <span>Confirmed: </span>
             <Chip
               size={size.XS}
               rounded={size.XL}
               background={color.RED_SOFT}
             >
-              +<Numeric value={country.NewConfirmed} />
+              <Numeric value={country.confirmed} />
             </Chip>
           </span>
         </span>

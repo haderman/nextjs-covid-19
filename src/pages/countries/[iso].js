@@ -3,9 +3,10 @@ import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
 import Stack from "components/common/stack"
-import useSummaryData from "hooks/useSummaryData"
 import Summary from "components/common/summary"
-import api from "utils/api"
+import useCountryData from "api/hooks/useCountryData"
+import useCountrySummary from "api/hooks/useCountrySummary"
+import api from "api/api"
 import * as size from 'utils/size'
 import * as color from "utils/color"
 
@@ -14,42 +15,50 @@ const Chart = dynamic(
   { ssr: false }
 )
 
-export async function getServerSideProps({ params: { slug } }) {
-  const data = await api.getCountryTotal(slug)
-  return { props: { slug, data } }
+export async function getServerSideProps({ params: { iso } }) {
+  return { props: { iso } }
 }
 
-export default function Country({ slug, data }) {
-  const summary = useSummaryData()
+export default function Country({ iso }) {
+  const countryData = useCountryData(iso)
 
-  if (summary.status === api.requestStatus.LOADING) {
-    return <Skeleton />
-  }
-
-  if (summary.status == api.requestStatus.ERROR) {
-    return <h3>Error</h3>
-  }
-
-  const country = summary.data.countriesMap[slug]
   return (
     <>
       <Head>
-        <title>{country.Country}</title>
+        <title>{iso}</title>
       </Head>
       <Stack size={size.M}>
-        <h3>{country.Country}</h3>
+        <h3>{iso}</h3>
       </Stack>
       <Stack size={size.XL}>
-        <Summary.Cards data={country} />
+        <StatsSummary iso={iso} />
       </Stack>
       <section>
         <Stack size={size.M}>
           <h4>Spread over time</h4>
         </Stack>
-        <MyChart data={data || []} />
+        {/* <MyChart data={data || []} /> */}
       </section>
     </>
   )
+}
+
+function StatsSummary({ iso }) {
+  const countrySummary = useCountrySummary(iso)
+
+  if (api.isError(countrySummary)) {
+    <div>Error</div>
+  }
+
+  if (api.isLoading(countrySummary)) {
+    return <div>Loading...</div>
+  }
+
+  if (api.isSuccess(countrySummary)) {
+    return <Summary.Cards data={api.getResult(countrySummary)} />
+  }
+
+  return null
 }
 
 function Skeleton() {

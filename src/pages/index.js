@@ -3,13 +3,12 @@ import Link from "next/link"
 import dynamic from "next/dynamic"
 import { useMemo, useCallback } from "react"
 
-import useWorldTotalData from "hooks/useWorldTotalData"
-import useSummaryData from "hooks/useSummaryData"
 import Stack from "components/common/stack"
 import useScreen, { screenType } from "hooks/useScreen"
 import * as size from "utils/size"
 import * as color from "utils/color"
-import api from "utils/api"
+import api from "api/api"
+import useGlobalSummary from "api/hooks/useGlobalSummary"
 
 const Chart = dynamic(() =>
   import("react-charts").then(mod => mod.Chart),
@@ -21,8 +20,9 @@ const SummaryCards = dynamic(
 )
 
 export default function Home() {
-  const { status, data } = useWorldTotalData()
-  const summary = useSummaryData()
+  // const { status, data } = useWorldTotalData()
+  // const summary = useSummaryData()
+  const globalSummary = useGlobalSummary()
   const screen = useScreen()
 
   const isSummaryCompactVisible = screen === screenType.PHONE || screen === screenType.TABLET
@@ -35,14 +35,14 @@ export default function Home() {
       <Stack size={size.XL}>
         <h3>Global</h3>
       </Stack>
-      {isSummaryCompactVisible && summary.status === api.requestStatus.SUCCESS &&
+      {isSummaryCompactVisible && api.isSuccess(globalSummary) &&
         <Stack size={size.XL}>
-          <SummaryCards data={summary.data.global} />
+          <SummaryCards data={api.getResult(globalSummary)} />
         </Stack>
       }
-      <Stack size={size.XL}>
+      {/* <Stack size={size.XL}>
         {status === api.requestStatus.SUCCESS && <MyChart data={data} />}
-      </Stack>
+      </Stack> */}
     </>
   )
 }
