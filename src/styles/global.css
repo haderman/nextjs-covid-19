@@ -315,6 +315,18 @@ input[type=text]:focus {
 .background-interactive-selected { background-color: var(--color-interactive-soft-selected); }
 .background-interactive:hover { background-color: var(--color-interactive-soft-hover); }
 
+.stroke-primary { stroke: var(--color-primary); }
+.stroke-secondary { stroke: var(--color-secondary); }
+.stroke-interactive { stroke: var(--color-interactive); }
+.stroke-disabled { stroke: var(--color-disabled); }
+.stroke-error { stroke: var(--color-warning); }
+.stroke-accent { stroke: var(--color-accent); }
+.stroke-green { stroke: var(--color-green); }
+.stroke-orange { stroke: var(--color-orange); }
+.stroke-red { stroke: var(--color-red); }
+.stroke-gray { stroke: var(--color-gray); }
+
+
 .backdrop-blur {
   backdrop-filter: blur(10px);
 }

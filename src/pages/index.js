@@ -10,10 +10,22 @@ import * as color from "utils/color"
 import api from "api/api"
 import useGlobalSummary from "api/hooks/useGlobalSummary"
 
-const Chart = dynamic(() =>
-  import("react-charts").then(mod => mod.Chart),
-  { ssr: false }
-)
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+const data = [
+  {name: 'Page A', uv: 20, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 50, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 100, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 120, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 160, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 180, pv: 2400, amt: 2400},
+  {name: 'Page A', uv: 200, pv: 2400, amt: 2400},
+];
+
+// const Chart = dynamic(() =>
+//   import("react-charts").then(mod => mod.Chart),
+//   { ssr: false }
+// )
+
 const SummaryCards = dynamic(
   () => import("../components/common/summary").then(mod => mod.Cards),
   { ssr: false }
@@ -40,9 +52,6 @@ export default function Home() {
           <SummaryCards data={api.getResult(globalSummary)} />
         </Stack>
       }
-      {/* <Stack size={size.XL}>
-        {status === api.requestStatus.SUCCESS && <MyChart data={data} />}
-      </Stack> */}
     </>
   )
 }

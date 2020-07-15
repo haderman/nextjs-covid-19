@@ -1,8 +1,8 @@
 import ActiveLink from "./common/activeLink"
-import WorldwideIcon from "../svg/worldwide.svg"
-import ListIcon from "../svg/list-1.svg"
-import InfoIcon from "../svg/info.svg"
-import StarIcon from "../svg/star.svg"
+import GlobeIcon from "../icons/globe.svg"
+import ListIcon from "../icons/list.svg"
+import InfoIcon from "../icons/help.svg"
+import StarIcon from "../icons/star.svg"
 
 export default function BottomNavigation() {
   const aClassNames = "full-height flex justify-center align-center"
@@ -13,7 +13,7 @@ export default function BottomNavigation() {
         <li className="flex-1 full-height">
           <ActiveLink href="/" passHref activeClassName="selected">
             <a className={aClassNames}>
-              <WorldwideIcon className="icon" />
+              <GlobeIcon className="icon" />
             </a>
           </ActiveLink>
         </li>

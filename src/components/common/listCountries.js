@@ -7,7 +7,7 @@ import Numeric from "./numeric"
 import * as size from "utils/size"
 import * as color from "utils/color"
 import api from "api/api"
-import StarIcon from "../../svg/star.svg"
+import StarIcon from "../../icons/star.svg"
 import Inline from "./inline"
 
 export default function ListCountries() {

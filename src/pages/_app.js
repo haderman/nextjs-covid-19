@@ -3,7 +3,7 @@ import { SWRConfig } from "swr"
 import Layout from "components/layout"
 import AppState from "components/contexts/appState"
 import "styles/global.css"
-import "styles/app.css"
+import "styles/layouts.css"
 
 function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
   const store = { countryNameToIso, countryNameToFlag }
