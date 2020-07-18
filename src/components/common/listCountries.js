@@ -15,11 +15,9 @@ export default function ListCountries() {
   const latestInfoByCountry = useGlobalLatestData()
 
   return (
-    <section className="clean-last-stack">
-      <Stack size={size.M}>
-        <h3>Countries</h3>
-      </Stack>
-      <ul>
+    <Stack as="section" size={size.M}>
+      <h3>Countries</h3>
+      <Stack as="ul" size={size.S}>
         {Object
           .entries(countryNameToIso)
           .map(([name, iso]) => {
@@ -34,13 +32,13 @@ export default function ListCountries() {
           })
           .sort((a, b) => (b.confirmed || 0) - (a.confirmed || 0))
           .map(country =>
-            <Stack key={country.name} size={size.S} as="li">
+            <li key={country.name} className="full-width">
               <DetailRow country={country} />
-            </Stack>
+            </li>
           )
         }
-      </ul>
-    </section>
+      </Stack>
+    </Stack>
   )
 }
 
@@ -92,22 +90,20 @@ function DetailRow({ country }) {
           <span className="text-l">
             {country.flag}
           </span>
-        </Inline>
-        <span className="text-left flex-1">
-          <Stack size={size.S}>
+          <Stack as="span" size={size.S}>
             <p className="text-m">{country.name}</p>
+            <p className="text-xs text-secondary">
+              <span>Confirmed: </span>
+              <Chip
+                size={size.XS}
+                rounded={size.XL}
+                background={color.RED_SOFT}
+              >
+                <Numeric value={country.confirmed} />
+              </Chip>
+            </p>
           </Stack>
-          <span className="text-xs text-secondary">
-            <span>Confirmed: </span>
-            <Chip
-              size={size.XS}
-              rounded={size.XL}
-              background={color.RED_SOFT}
-            >
-              <Numeric value={country.confirmed} />
-            </Chip>
-          </span>
-        </span>
+        </Inline>
         <button className="icon-button" onClick={handleOnClick}>
           <StarIcon className="icon-s" />
         </button>

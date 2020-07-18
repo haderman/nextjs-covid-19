@@ -21,8 +21,8 @@ function Sidebar() {
           <GlobalCount summary={globalSummary} />
         :null
         }
+        <ListCountries />
       </Stack>
-      <ListCountries />
     </aside>
   )
 }
@@ -35,21 +35,17 @@ function GlobalCount({ summary }) {
       :api.isLoading(summary) ?
         <h2>Loading...</h2>
       :api.isSuccess(summary) ?
-        <>
-          <Stack size={size.XS}>
-            <h3>Global cases</h3>
-          </Stack>
-          {/* <Stack size={size.M}>
-            <span className="text-secondary text-s">
-              Updated <time>{prettyDate(summary.data)}</time>
-            </span>
-          </Stack> */}
+        <Stack size={size.S}>
+          <h3>Global cases</h3>
+          {/* <span className="text-secondary text-s">
+            Updated <time>{prettyDate(summary.data)}</time>
+          </span> */}
           <ActiveLinke href="/" passHref activeClassName="background-deep-1">
             <a>
               <Summary.Compact data={api.getResult(summary)} />
             </a>
           </ActiveLinke>
-        </>
+        </Stack>
       :null
       }
     </section>

@@ -4,6 +4,8 @@
 --screen-desktop: 1920px; */
 
 :root {
+  --measure: 60ch;
+
   /* https://www.w3schools.com/tags/ref_pxtoemconversion.asp */
   --size-xs: 0.25rem;
   --size-s: 0.5rem;
@@ -114,9 +116,21 @@
   margin: 0;
   padding: 0;
   position: relative;
+  max-width: none;
 }
-
 *:focus { outline: none; }
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+figcaption {
+  max-width: var(--measure);
+}
 
 html {
   font-family: sans-serif;
@@ -243,17 +257,25 @@ input[type=text]:focus {
 .outer-space-l { margin: var(--size-l); }
 .outer-space-xl { margin: var(--size-xl); }
 
-.inline-xs { margin-right: var(--size-xs); }
-.inline-s { margin-right: var(--size-s); }
-.inline-m { margin-right: var(--size-m); }
-.inline-l { margin-right: var(--size-l); }
-.inline-xl { margin-right: var(--size-xl); }
+[class^="inline"] {
+  display: inline-flex;
+  align-items: center;
+}
+.inline\:xs > *:not(:last-child) { margin-right: var(--size-xs); }
+.inline\:s  > *:not(:last-child) { margin-right: var(--size-s); }
+.inline\:m  > *:not(:last-child) { margin-right: var(--size-m); }
+.inline\:l  > *:not(:last-child) { margin-right: var(--size-l); }
+.inline\:xl > *:not(:last-child) { margin-right: var(--size-xl); }
 
-.stack-xs { margin-bottom: var(--size-xs); }
-.stack-s { margin-bottom: var(--size-s); }
-.stack-m { margin-bottom: var(--size-m); }
-.stack-l { margin-bottom: var(--size-l); }
-.stack-xl { margin-bottom: var(--size-xl); }
+[class^="stack"] {
+  display: flex;
+  flex-direction: column;
+}
+.stack\:xs > *:not(:last-child) { margin-bottom: var(--size-xs); }
+.stack\:s  > *:not(:last-child) { margin-bottom: var(--size-s); }
+.stack\:m  > *:not(:last-child) { margin-bottom: var(--size-m); }
+.stack\:l  > *:not(:last-child) { margin-bottom: var(--size-l); }
+.stack\:xl > *:not(:last-child) { margin-bottom: var(--size-xl); }
 
 /* SIZES */
 .full-width { width: 100%; }
@@ -489,3 +511,13 @@ input[type=text]:focus {
 }
 
 h1, h2, h3, h4 { color: var(--text-secondary); }
+
+.max-width\:measure {
+  max-width: var(--measure);
+  background-color: red;
+}
+
+.max-width\:measure\/2 {
+  max-width: calc(var(--measure) / 2);
+  background-color: green;
+}

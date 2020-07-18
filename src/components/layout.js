@@ -13,7 +13,7 @@ export default function Layout({ children }) {
     <div className="layout theme-dark background-deep-1 text-primary">
       <Header />
       {(screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP) && <Sidebar />}
-      <main className="background-deep-1">{children}</main>
+      <main className="background-deep-1 inset-m">{children}</main>
       {screen === screenType.PHONE && <BottomNavigation />}
     </div>
   )

@@ -26,52 +26,52 @@ export function Compact({ data }) {
     <article className="block stretch-inset-m rounded border-s border-color-strong background-interactive">
       <Stack size={size.S}>
         <h4>Total confirmed cases</h4>
-      </Stack>
-      <Stack size={size.L}>
-        <div className="flex justify-space-between align-center">
-          <h3 className="text-red text-xl">
-            <Numeric value={data.confirmed} />
-          </h3>
-          <Chip rounded={size.L} background={color.RED_SOFT} size={size.S}>
-            + <Numeric value={data.newConfirmed} />
-          </Chip>
+        <Stack size={size.L}>
+          <div className="flex justify-space-between align-center">
+            <h3 className="text-red text-xl">
+              <Numeric value={data.confirmed} />
+            </h3>
+            <Chip rounded={size.L} background={color.RED_SOFT} size={size.S}>
+              + <Numeric value={data.newConfirmed} />
+            </Chip>
+          </div>
+        </Stack>
+        <div className="grid grid-gap-m grid-col-3-auto">
+          {/* row 1 */}
+          <span className="text-secondary">Actives</span>
+          <Numeric
+            value={data.confirmed - data.recovered - data.deaths}
+            className="text-orange text-end"
+          />
+          <span className="text-end">
+            <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
+              + <Numeric value={data.newConfirmed} />
+            </Chip>
+          </span>
+          {/* row 2 */}
+          <span className="text-secondary">Recovered</span>
+          <Numeric
+            value={data.recovered}
+            className="text-green text-end"
+          />
+          <span className="text-end">
+            <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
+              + <Numeric value={data.newRecovered} />
+            </Chip>
+          </span>
+          {/* row 3 */}
+          <span className="text-secondary">Deaths</span>
+          <Numeric
+            value={data.deaths}
+            className="text-gray text-end"
+          />
+          <span className="text-end">
+            <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
+              + <Numeric value={data.newDeaths} />
+            </Chip>
+          </span>
         </div>
       </Stack>
-      <div className="grid grid-gap-m grid-col-3-auto">
-        {/* row 1 */}
-        <span className="text-secondary">Actives</span>
-        <Numeric
-          value={data.confirmed - data.recovered - data.deaths}
-          className="text-orange text-end"
-        />
-        <span className="text-end">
-          <Chip rounded={size.L} background={color.ORANGE_SOFT} size={size.S}>
-            + <Numeric value={data.newConfirmed} />
-          </Chip>
-        </span>
-        {/* row 2 */}
-        <span className="text-secondary">Recovered</span>
-        <Numeric
-          value={data.recovered}
-          className="text-green text-end"
-        />
-        <span className="text-end">
-          <Chip rounded={size.L} background={color.GREEN_SOFT} size={size.S}>
-            + <Numeric value={data.newRecovered} />
-          </Chip>
-        </span>
-        {/* row 3 */}
-        <span className="text-secondary">Deaths</span>
-        <Numeric
-          value={data.deaths}
-          className="text-gray text-end"
-        />
-        <span className="text-end">
-          <Chip rounded={size.L} background={color.GRAY_SOFT} size={size.S}>
-            + <Numeric value={data.newDeaths} />
-          </Chip>
-        </span>
-      </div>
     </article>
   )
 }

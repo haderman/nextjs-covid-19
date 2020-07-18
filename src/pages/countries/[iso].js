@@ -44,33 +44,28 @@ export default function Country({ iso }) {
       <Head>
         <title>{iso}</title>
       </Head>
-      <Header>
-        <h3>{iso}</h3>
-        {isLayoutButtonsVisible &&
-          <span>
-            <Inline size={size.M}>
+      <Stack size={size.M}>
+        <Header>
+          <h3>{iso}</h3>
+          {isLayoutButtonsVisible &&
+            <Inline as="span" size={size.M}>
               <button className="icon-button" onClick={handleClick("vertical")}>
                 <LayoutVerticalIcon className={orientation === "vertical" ? "stroke-primary" : ""} />
               </button>
+              <button className="icon-button" onClick={handleClick("horizontal")}>
+                <LayoutHorizontalIcon className={orientation === "horizontal" ? "stroke-primary" : ""} />
+              </button>
             </Inline>
-            <button className="icon-button" onClick={handleClick("horizontal")}>
-              <LayoutHorizontalIcon className={orientation === "horizontal" ? "stroke-primary" : ""} />
-            </button>
-          </span>
-        }
-      </Header>
-      <section className="inset-l">
+          }
+        </Header>
         <TimeSeries iso={iso} orientation={orientation} />
-      </section>
+      </Stack>
     </>
   )
 }
 
 function Header({ children }) {
   const style = [
-    "squish-inset-l",
-    "border-bottom-s",
-    "border-color-soft",
     "text-primary",
     "flex",
     "justify-space-between",
@@ -234,19 +229,19 @@ function Card(props) {
     <article id={id} className="inset-m rounded border-s border-color-soft">
       <Stack size={size.XS}>
         <p className="text-secondary">{title}</p>
-      </Stack>
-      <Stack size={size.XS}>
         <h3 className={`text-secondary text-xl text-${primaryColor}`}>
           <Numeric value={primaryText} />
         </h3>
+        <Inline>
+          <Chip
+            size={size.M}
+            rounded={size.XL}
+            background={secondaryColor}
+          >
+            {secondaryText >= 0 && "+"}<Numeric value={secondaryText} />
+          </Chip>
+        </Inline>
       </Stack>
-      <Chip
-        size={size.M}
-        rounded={size.XL}
-        background={secondaryColor}
-      >
-        {secondaryText >= 0 && "+"}<Numeric value={secondaryText} />
-      </Chip>
       <div className="absolute top-0 left-0 full-width full-height">
         <ResponsiveContainer>
           <AreaChart id="test" data={timeSeries}>
