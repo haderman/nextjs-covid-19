@@ -7,7 +7,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 
 import LayoutHorizontalIcon from "../../icons/layout-navbar.svg"
@@ -98,7 +98,7 @@ function TimeSeries({ iso, orientation }) {
   return null
 }
 
-function TimeSeriesError({ error }) {
+function TimeSeriesError({ error }) {
   return <div>Error</div>
 }
 

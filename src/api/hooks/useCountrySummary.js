@@ -24,3 +24,4 @@ function calculateSummary(data) {
     actives: latestStats.confirmed - latestStats.recovered - latestStats.deaths
   }
 }
+
