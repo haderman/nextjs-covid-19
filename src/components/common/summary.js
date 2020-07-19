@@ -1,7 +1,6 @@
 import PropTypes from "prop-types"
 
 import Stack from "./stack"
-import Inline from "./inline"
 import Chip from "./chip"
 import Numeric from "./numeric"
 

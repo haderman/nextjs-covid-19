@@ -1,4 +1,4 @@
-import { useState } from "react"
+import PropTypes from "prop-types"
 import Head from 'next/head'
 import {
   AreaChart,
@@ -15,6 +15,7 @@ import LayoutVerticalIcon from "../../icons/layout-sidebar-right.svg"
 import Stack from "components/common/stack"
 import Numeric from "components/common/numeric"
 import Chip from "components/common/chip"
+import Inline from "components/common/inline";
 import useCountryTimeSeries from "api/hooks/useCountryTimeSeries"
 import useCountrySummary from "api/hooks/useCountrySummary"
 import useMounted from "hooks/useMounted"
@@ -22,16 +23,21 @@ import useScreen, { screenType } from "hooks/useScreen"
 import api from "api/api"
 import * as size from 'utils/size'
 import * as color from "utils/color"
-import Inline from "components/common/inline";
+import settings from "utils/settings"
+import orientation from "utils/orientation"
 
 export async function getServerSideProps({ params: { iso } }) {
   return { props: { iso } }
 }
 
+Country.propTypes = {
+  iso: PropTypes.string
+}
+
 export default function Country({ iso }) {
-  const [orientation, setOrientation] = useState("vertical")
-  const handleClick = newOrientation => evt => {
-    setOrientation(newOrientation)
+  const [chartOrientation, setChartOrientation] = settings.useChartOrientation()
+  const handleClick = newOrientation => () => {
+    setChartOrientation(newOrientation)
   }
 
   const isMounted = useMounted()
@@ -49,19 +55,23 @@ export default function Country({ iso }) {
           <h3>{iso}</h3>
           {isLayoutButtonsVisible &&
             <Inline as="span" size={size.M}>
-              <button className="icon-button" onClick={handleClick("vertical")}>
-                <LayoutVerticalIcon className={orientation === "vertical" ? "stroke-primary" : ""} />
+              <button className="icon-button" onClick={handleClick(orientation.VERTICAL)}>
+                <LayoutVerticalIcon className={orientation.isVertical(chartOrientation) ? "stroke-primary" : ""} />
               </button>
-              <button className="icon-button" onClick={handleClick("horizontal")}>
-                <LayoutHorizontalIcon className={orientation === "horizontal" ? "stroke-primary" : ""} />
+              <button className="icon-button" onClick={handleClick(orientation.HORIZONTAL)}>
+                <LayoutHorizontalIcon className={orientation.isHorizontal(chartOrientation) ? "stroke-primary" : ""} />
               </button>
             </Inline>
           }
         </Header>
-        <TimeSeries iso={iso} orientation={orientation} />
+        <TimeSeries iso={iso} chartOrientation={chartOrientation} />
       </Stack>
     </>
   )
+}
+
+Header.propTypes = {
+  children: PropTypes.node
 }
 
 function Header({ children }) {
@@ -80,7 +90,12 @@ function Header({ children }) {
   )
 }
 
-function TimeSeries({ iso, orientation }) {
+TimeSeries.propTypes = {
+  iso: PropTypes.string,
+  chartOrientation: orientation.isOrientation,
+}
+
+function TimeSeries({ iso, chartOrientation }) {
   const timeSeries = useCountryTimeSeries(iso)
 
   if (api.isError(timeSeries)) {
@@ -92,21 +107,31 @@ function TimeSeries({ iso, orientation }) {
   }
 
   if (api.isSuccess(timeSeries)) {
-    return <TimeSeriesChart data={api.getResult(timeSeries)} iso={iso} orientation={orientation} />
+    return <TimeSeriesChart data={api.getResult(timeSeries)} iso={iso} chartOrientation={chartOrientation} />
   }
 
   return null
 }
 
+TimeSeriesError.propTypes = {
+  error: PropTypes.string
+}
+
 function TimeSeriesError({ error }) {
-  return <div>Error</div>
+  return <div>Error: {error}</div>
 }
 
 function TimeSeriesLoading() {
   return <div>Loading..</div>
 }
 
-function TimeSeriesChart({ data, iso, orientation}) {
+TimeSeriesChart.propTypes = {
+  data: PropTypes.object,
+  iso: PropTypes.string,
+  chartOrientation: orientation.isOrientation,
+}
+
+function TimeSeriesChart({ data, iso, chartOrientation}) {
   const byAscendingDates = (a,b) => a > b ? -1 : a < b ? 1 : 0
   const data_ = Object.entries(data)
     .map(([date, value]) => ({ ...value, date }))
@@ -117,7 +142,7 @@ function TimeSeriesChart({ data, iso, orientation}) {
   const countrySummary = useCountrySummary(iso)
   const summary = api.getResult(countrySummary)
 
-  const Layout = orientation === "vertical" ? VerticalLayout : HorizontalLayout
+  const Layout = orientation.isVertical(chartOrientation) ? VerticalLayout : HorizontalLayout
 
   return (
     <Layout>
@@ -197,6 +222,10 @@ function TimeSeriesChart({ data, iso, orientation}) {
   )
 }
 
+VerticalLayout.propTypes = {
+  children: PropTypes.node
+}
+
 function VerticalLayout({ children }) {
   return (
     <section key="vertical" className="layout-area-charts-vertical full-width full-height">
@@ -205,12 +234,27 @@ function VerticalLayout({ children }) {
   )
 }
 
+HorizontalLayout.propTypes = {
+  children: PropTypes.node
+}
+
 function HorizontalLayout({ children }) {
   return (
     <section key="horizontal" className="layout-area-charts-horizontal full-width full-height">
       {children}
     </section>
   )
+}
+
+Card.propTypes = {
+  title: PropTypes.string,
+  primaryText: PropTypes.any,
+  secondaryText: PropTypes.any,
+  primaryColor: color.isColor,
+  secondaryColor: color.isColor,
+  timeSeries: PropTypes.array,
+  dataKey: PropTypes.string,
+  id: PropTypes.string,
 }
 
 function Card(props) {

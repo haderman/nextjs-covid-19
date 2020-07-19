@@ -1,11 +1,21 @@
-// https://nextjs.org/docs/advanced-features/custom-app
-import { SWRConfig } from "swr"
+import PropTypes from 'prop-types'
+import { SWRConfig } from "swr"
+
 import Layout from "components/layout"
 import AppState from "components/contexts/appState"
+import settings from "utils/settings"
 import "styles/global.css"
 import "styles/layouts.css"
 
+App.propTypes = {
+  Component: PropTypes.func,
+  pageProps: PropTypes.object,
+  countryNameToIso: PropTypes.object,
+  countryNameToFlag: PropTypes.object,
+}
+
 function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
+  // this is
   const store = { countryNameToIso, countryNameToFlag }
 
   return (
@@ -20,9 +30,11 @@ function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
       }}
     >
       <AppState.Provider value={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <settings.Provider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </settings.Provider>
       </AppState.Provider>
     </SWRConfig>
   )

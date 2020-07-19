@@ -14,7 +14,7 @@ export const XL = "xl"
 export function isSize(props, propName, componentName) {
   const value = props[propName]
 
-  if (value === undefined || value === null || value === "") {
+  if (value === undefined || value === null || value === "") {
     return null
   }
 
