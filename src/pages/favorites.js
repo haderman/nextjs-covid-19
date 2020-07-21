@@ -1,7 +1,5 @@
+import { FavoritesCountriesList } from "components/common/countriesList"
+
 export default function Favorites() {
-  return (
-    <>
-      <h2>Favorites</h2>
-    </>
-  )
+  return <FavoritesCountriesList />
 }

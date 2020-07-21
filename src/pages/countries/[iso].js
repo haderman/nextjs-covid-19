@@ -107,7 +107,13 @@ function TimeSeries({ iso, chartOrientation }) {
   }
 
   if (api.isSuccess(timeSeries)) {
-    return <TimeSeriesChart data={api.getResult(timeSeries)} iso={iso} chartOrientation={chartOrientation} />
+    return (
+      <TimeSeriesChart
+        data={api.getResult(timeSeries)}
+        iso={iso}
+        chartOrientation={chartOrientation}
+      />
+    )
   }
 
   return null
@@ -138,10 +144,8 @@ function TimeSeriesChart({ data, iso, chartOrientation}) {
     .map(item => ({ ...item, actives: item.confirmed - item.recovered - item.deaths }))
     .sort(byAscendingDates)
 
-
   const countrySummary = useCountrySummary(iso)
   const summary = api.getResult(countrySummary)
-
   const Layout = orientation.isVertical(chartOrientation) ? VerticalLayout : HorizontalLayout
 
   return (
@@ -273,7 +277,7 @@ function Card(props) {
     <article id={id} className="inset-m rounded border-s border-color-soft">
       <Stack size={size.XS}>
         <p className="text-secondary">{title}</p>
-        <h3 className={`text-secondary text-xl text-${primaryColor}`}>
+        <h3 className={`text-secondary text-l text-${primaryColor}`}>
           <Numeric value={primaryText} />
         </h3>
         <Inline>

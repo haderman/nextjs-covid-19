@@ -5,6 +5,7 @@
 
 :root {
   --measure: 60ch;
+  --ratio: 1.5;
 
   /* https://www.w3schools.com/tags/ref_pxtoemconversion.asp */
   --size-xs: 0.25rem;
@@ -120,18 +121,6 @@
 }
 *:focus { outline: none; }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-li,
-figcaption {
-  max-width: var(--measure);
-}
-
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -147,12 +136,32 @@ body {
   background-color: var(--color-deep-1);
 }
 
-h1 {
-  font-size: 48px;
-  font-weight: 400;
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+figcaption {
+  max-width: var(--measure);
 }
-h2 { font-size: 36px; }
-h3 { font-size: 24px; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-secondary);
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.6em; }
+h4 { font-size: 1.4em; }
+h5 { font-size: 1.2em; }
 
 input[type=text] {
   position: relative;
@@ -348,6 +357,7 @@ input[type=text]:focus {
 .stroke-red { stroke: var(--color-red); }
 .stroke-gray { stroke: var(--color-gray); }
 
+.color-primary { color: var(--color-primary); }
 
 .backdrop-blur {
   backdrop-filter: blur(10px);
@@ -450,6 +460,9 @@ input[type=text]:focus {
 .border-bottom-s { border-bottom: 1px solid; }
 .border-bottom-m { border-bottom: 2px solid; }
 .border-bottom-l { border-bottom: 3px solid; }
+.border-right-s { border-right: 1px solid; }
+.border-right-m { border-right: 2px solid; }
+.border-right-l { border-right: 3px solid; }
 .border-color-soft { border-color: var(--color-border-soft); }
 .border-color-strong { border-color: var(--color-border-strong); }
 .border-deep-0 { border-color: var(--color-deep-0); }
@@ -509,8 +522,6 @@ input[type=text]:focus {
 .flex-children-1 > * {
   flex: 1;
 }
-
-h1, h2, h3, h4 { color: var(--text-secondary); }
 
 .max-width\:measure {
   max-width: var(--measure);

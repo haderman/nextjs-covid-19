@@ -12,7 +12,7 @@ export default function useScreen() {
 
   const [windowSize, setWindowSize] = useState(getSize())
 
-  useEffect(function checkWidnowResize() {
+  useEffect(function checkWidnowResize() {
     if (isClient) return
 
     function handleResize() {

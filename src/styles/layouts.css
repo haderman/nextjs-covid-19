@@ -99,13 +99,12 @@ desktop: 1920px;
   .layout > aside, .layout > main { overflow: auto; }
 }
 
-
 .layout-area-charts-vertical {
   height: 80vh;
   /* height: -webkit-fill-available; */
   /* grid-template-rows: 60px auto; */
   display: grid;
-  gap: 10px;
+  gap: 1.8rem;
   grid-template-columns: 3fr clamp(250px, 15vw, 320px);
   grid-template-areas:
     "main-area-chart area-chart-1"
@@ -119,7 +118,7 @@ desktop: 1920px;
   /* height: -webkit-fill-available; */
   /* grid-template-rows: 60px auto; */
   display: grid;
-  gap: 10px;
+  gap: 1.8rem;
   grid-template-rows: clamp(150px, 10vw, 220px) 3fr;
   grid-template-columns: auto auto auto auto;
   grid-template-areas:
@@ -134,7 +133,9 @@ desktop: 1920px;
 
 @media screen and (max-width: 1200px) {
   .layout-area-charts-vertical,
-  .layout-area-charts-horizontal {
+  .layout-area-charts-horizontal {
+    gap: 1rem;
+    grid-template-rows: 15vh 15vh auto;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
     "area-chart-1 area-chart-2"

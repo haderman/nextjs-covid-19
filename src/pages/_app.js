@@ -4,6 +4,7 @@ import { SWRConfig } from "swr"
 import Layout from "components/layout"
 import AppState from "components/contexts/appState"
 import settings from "utils/settings"
+import favorites from "utils/favorites"
 import "styles/global.css"
 import "styles/layouts.css"
 
@@ -15,7 +16,6 @@ App.propTypes = {
 }
 
 function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
-  // this is
   const store = { countryNameToIso, countryNameToFlag }
 
   return (
@@ -31,9 +31,11 @@ function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
     >
       <AppState.Provider value={store}>
         <settings.Provider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <favorites.Provider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </favorites.Provider>
         </settings.Provider>
       </AppState.Provider>
     </SWRConfig>

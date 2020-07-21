@@ -1,5 +1,5 @@
-import ListCountries from "components/common/listCountries"
+import CountriesList from "components/common/countriesList"
 
 export default function Countries() {
-  return <ListCountries />
+  return <CountriesList />
 }
