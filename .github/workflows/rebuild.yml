@@ -1,0 +1,5 @@
+name: Rebuild to update static data on the app deploy
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+    
