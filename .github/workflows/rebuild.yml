@@ -1,15 +1,25 @@
-name: Rebuild to update static data on the app deploy
+name: Deploy to update remote data
 on:
   schedule:
     - cron: "0 */4 * * *"
     
 jobs:
-  force_new_deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit --allow-empty -m "Empty commit to deploy"
-          git push
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install dependencies
+        run: yarn
+      - uses: actions/vercel-deployment@0.5.1
+        with:
+          vercelToken: ${{ secrets.VERCEL_TOKEN }}
+          vercelOrgId: ${{ secrets.VERCEL_ORG_ID }}
+          vercelProjectId: ${{ secrets.VERCEL_PROJECT_ID }}
+          githubToken: ${{ secrets.PAT }}
+          sourceDirectory: "src"
+          assignDomain: "nextjs-covid-19.vercel.app/"  
+            
