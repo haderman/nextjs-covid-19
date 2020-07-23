@@ -13,5 +13,6 @@ jobs:
           echo | date +"%y-%m-%d %T" | >auto-commit.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git add .
           git commit --allow-empty -m "Empty commit to deploy"
           git push
