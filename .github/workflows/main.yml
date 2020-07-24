@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          echo | date +"%y-%m-%d %T" | >auto-commit.txt
+          date > last-rebuild-date.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
