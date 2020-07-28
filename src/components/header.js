@@ -1,7 +1,7 @@
 export default function Header() {
   return (
-    <header className="background-deep-1 border-bottom-s border-color-strong flex sticky-top z-index-2">
-      <h3>COVID-19 Tracker</h3>
+    <header className="background-inherit border-bottom-s border-color-soft flex sticky-top z-index-2 flex align-center">
+      <h1>COVID-19 Tracker</h1>
     </header>
   )
 }

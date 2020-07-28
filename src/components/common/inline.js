@@ -3,7 +3,7 @@ import * as size from "utils/size"
 
 function Inline({ size, children, as }) {
   const className = size ? `inline:${size}` : "inline-flex"
-  const ElementType = as || "span"
+  const ElementType = as || "div"
   return <ElementType className={className}>{children}</ElementType>
 }
 

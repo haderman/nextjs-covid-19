@@ -29,7 +29,7 @@
   --text-primary: hsl(0, 0%, 90%);
   --text-secondary: hsl(0, 0%, 70%);
 
-  --color-primary: hsl(188, 89%, 49%);
+  --color-primary: hsl(188, 89%, 30%);
   --color-secondary: hsl(39, 89%, 37%);
   --color-accent: hsl(48, 100%, 50%);
   --color-warning: hsl(358, 57%, 50%);
@@ -42,20 +42,21 @@
   --color-red-soft: hsla(0, 67%, 55%, 0.2);
   --color-green: hsl(120, 60%, 40%);
   --color-green-soft: hsla(134, 60%, 50%, 0.2);
-  --color-orange: hsl(40, 60%, 40%);
+  --color-orange: hsl(42, 60%, 42%);
   --color-orange-soft: hsla(44, 85%, 57%, 0.2);
   --color-gray: hsl(0, 0%, 46%);
   --color-gray-soft: hsla(221, 14%, 68%, 0.2);
 
-  --color-deep-0: hsla(210, 20%, 5%, 1); /*hsl(0, 0%, 7%); */
-  --color-deep-1: black;
+  --color-deep-0: black;
+  --color-deep-1: hsla(216, 40%, 4%, 1);
+  /* --color-deep-1: hsl(0, 0%, 7%); */
   --color-deep-2: hsl(0, 0%, 9%);
   --color-deep-3: hsl(240, 2%, 22%);
   --color-deep-4: hsl(240, 1%, 27%);
-  --color-deep-5: hsl(240, 1%, 33%);
+  --color-deep-5: hsl(240, 10%, 53%);
   --color-deep-6: hsl(240, 2%, 49%);
 
-  --color-border-soft: hsl(0, 0%, 16%);
+  --color-border-soft: hsl(0, 0%, 10%);
   --color-border-strong: hsl(0, 0%, 16%);
 }
 
@@ -157,11 +158,11 @@ h6 {
   color: var(--text-secondary);
 }
 
-h1 { font-size: 2em; }
-h2 { font-size: 1.8em; }
-h3 { font-size: 1.6em; }
-h4 { font-size: 1.4em; }
-h5 { font-size: 1.2em; }
+h1 { font-size: 1.8em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.4em; }
+h4 { font-size: 1.2em; }
+h5 { font-size: 1em; }
 
 input[type=text] {
   position: relative;
@@ -345,7 +346,11 @@ input[type=text]:focus {
 .background-interactive { background-color: var(--color-interactive-soft); }
 .background-interactive-selected { background-color: var(--color-interactive-soft-selected); }
 .background-interactive:hover { background-color: var(--color-interactive-soft-hover); }
+.background-interactive\:hover:hover {
+  background-color: var(--color-interactive-soft-hover);
+}
 
+.stroke-none { stroke: none; }
 .stroke-primary { stroke: var(--color-primary); }
 .stroke-secondary { stroke: var(--color-secondary); }
 .stroke-interactive { stroke: var(--color-interactive); }

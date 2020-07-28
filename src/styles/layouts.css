@@ -9,7 +9,6 @@ html {
 
 .layout > aside {
   grid-area: sidebar;
-  border-right: 1px solid var(--color-border-soft);
 }
 
 .layout > main {
@@ -29,22 +28,6 @@ html {
 
 .layout > nav .selected svg.icon{
   stroke: var(--color-primary);
-}
-
-svg {
-  stroke: var(--text-primary);
-  stroke-width: 1px;
-}
-
-svg.icon-s {
-  width: 18px;
-  height: 18px;
-  stroke-width: 1px;
-  /* stroke: var(--color-primary); */
-}
-
-svg.icon {
-  stroke-width: 1px;
 }
 
 .layout {
@@ -89,8 +72,9 @@ desktop: 1920px;
 @media screen and (min-width: 1200px) {
   .layout {
     height: 100vh;
+    column-gap: 40px;
     grid-template-rows: 60px auto;
-    grid-template-columns: clamp(320px, 20vw, 400px) 3fr;
+    grid-template-columns: clamp(300px, 20vw, 400px) 3fr;
     grid-template-areas:
       "header  header"
       "sidebar main"
@@ -105,7 +89,7 @@ desktop: 1920px;
   /* grid-template-rows: 60px auto; */
   display: grid;
   gap: 1.8rem;
-  grid-template-columns: 3fr clamp(250px, 15vw, 320px);
+  grid-template-columns: auto clamp(250px, 15vw, 320px);
   grid-template-areas:
     "main-area-chart area-chart-1"
     "main-area-chart area-chart-2"
@@ -115,12 +99,10 @@ desktop: 1920px;
 
 .layout-area-charts-horizontal {
   height: 80vh;
-  /* height: -webkit-fill-available; */
-  /* grid-template-rows: 60px auto; */
   display: grid;
   gap: 1.8rem;
-  grid-template-rows: clamp(150px, 10vw, 220px) 3fr;
-  grid-template-columns: auto auto auto auto;
+  grid-template-rows: clamp(140px, 8vw, 220px) 3fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-areas:
     "area-chart-1 area-chart-2 area-chart-3 area-chart-4"
     "main-area-chart main-area-chart main-area-chart main-area-chart"

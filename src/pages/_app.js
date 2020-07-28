@@ -5,17 +5,19 @@ import Layout from "components/layout"
 import AppState from "components/contexts/appState"
 import settings from "utils/settings"
 import favorites from "utils/favorites"
-import "styles/global.css"
+import "styles/utils.css"
 import "styles/layouts.css"
+import "styles/app.css"
+
+import countryNameToIso from "../data/country_name_to_iso.json"
+import countryNameToFlag from "../data/country_flags.json"
 
 App.propTypes = {
   Component: PropTypes.func,
   pageProps: PropTypes.object,
-  countryNameToIso: PropTypes.object,
-  countryNameToFlag: PropTypes.object,
 }
 
-function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
+function App({ Component, pageProps }) {
   const store = { countryNameToIso, countryNameToFlag }
 
   return (
@@ -40,12 +42,6 @@ function App({ Component, pageProps, countryNameToIso, countryNameToFlag }) {
       </AppState.Provider>
     </SWRConfig>
   )
-}
-
-App.getInitialProps = async (ctx) => {
-  const countryNameToIso = require("../data/country_name_to_iso.json")
-  const countryNameToFlag = require("../data/country_flags.json")
-  return { countryNameToIso, countryNameToFlag }
 }
 
 export default App

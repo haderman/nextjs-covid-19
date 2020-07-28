@@ -1,0 +1,48 @@
+svg {
+  stroke: var(--color-deep-4);
+  stroke-width: 1px;
+}
+
+svg.icon-s {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1px;
+  /* stroke: var(--color-primary); */
+}
+
+svg.icon {
+  stroke-width: 1px;
+}
+
+svg.app_heart_icon_fill_primary > path:last-child,
+.app_heart_icon_fill_primary svg > path:last-child {
+  fill: var(--color-primary);
+  fill: hsl(188, 89%, 40%, 1);
+  stroke: none;
+}
+
+@media screen and (min-width: 1200px) {
+  .hover-control .display\:hover {
+    opacity: 0;
+  }
+
+  .hover-control:hover .display\:hover {
+    opacity: 1;
+    transition: opacity .1s ease-in-out;
+  }
+
+  .selected .display\:hover {
+    opacity: 1 !important;
+  }
+}
+
+
+.transition\:opacity {
+  opacity: 0;
+  transition: opactity;
+  animation: opacityTo1 .3s ease-in forwards;
+}
+
+@keyframes opacityTo1 {
+  100% { opacity: 1; }
+}

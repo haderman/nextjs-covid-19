@@ -25,7 +25,7 @@ export default function BottomNavigation() {
           </ActiveLink>
         </li>
         <li className="flex-1 full-height">
-          <ActiveLink href="/favorites" passHref activeClassName="selected">
+          <ActiveLink href="/favorites" passHref activeClassName="app_heart_icon_fill_primary">
             <a className={aClassNames}>
               <FavoriteIcon className="icon" />
             </a>

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 export default function useScreen() {
   const isClient = typeof window === "object"
 
-  function getSize() {
+  function getSize() {
     return {
       width: isClient ? window.innerWidth : undefined,
       height: isClient? window.innerHeight : undefined,

@@ -4,6 +4,7 @@ import ActiveLink from "./activeLink"
 import Stack from "./stack"
 import Chip from "./chip"
 import Numeric from "./numeric"
+import useMounted from "hooks/useMounted"
 import * as size from "utils/size"
 import * as color from "utils/color"
 import favorites from "utils/favorites"
@@ -41,7 +42,7 @@ export default function CountriesList() {
   return (
     <Stack as="ul" size={size.S}>
       {countriesList.map(country =>
-        <li key={country.name} className="full-width">
+        <li key={country.name} className="full-width hover-control hover-control-adjacents">
           <DetailRow country={country} />
         </li>
       )}
@@ -59,23 +60,25 @@ export function FavoritesCountriesList() {
       {countriesList
         .filter(isFavorite)
         .map(country =>
-        <li key={country.name} className="full-width">
-          <DetailRow country={country} />
-        </li>
+          <li key={country.name} className="full-width hover-control">
+            <DetailRow country={country} />
+          </li>
       )}
     </Stack>
   )
 }
 
 function DetailRow({ country }) {
+  const isMounted = useMounted()
+
   return (
     <ActiveLink
       passHref
       href="/countries/[iso]"
       as={`/countries/${country.iso}`}
-      activeClassName="background-interactive-selected"
+      activeClassName="background-interactive-selected selected"
     >
-      <a className="flex justify-space-between align-center stretch-inset-m rounded">
+      <a className="flex justify-space-between align-center stretch-inset-m rounded background-interactive:hover">
         <Inline size={size.L}>
           <span className="text-l">
             {country.flag}
@@ -94,7 +97,11 @@ function DetailRow({ country }) {
             </p>
           </Stack>
         </Inline>
-        <FavoriteButton iso={country.iso} size={size.S} />
+        {isMounted && (
+          <span className="display:hover">
+            <FavoriteButton iso={country.iso} size={size.S} />
+          </span>
+        )}
       </a>
     </ActiveLink>
   )

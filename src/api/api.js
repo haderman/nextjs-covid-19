@@ -15,8 +15,7 @@ function composeUrl(endpoint) {
 
 const requests = {
   async get(endpoint) {
-    const { data } = await axios.get(composeUrl(endpoint))
-    return data
+    return await axios.get(composeUrl(endpoint))
   }
 }
 
@@ -26,6 +25,10 @@ function getCountry(iso) {
 
 function getGlobalLatest() {
   return requests.get("global/latest")
+}
+
+function getGlobal() {
+  return requests.get("global")
 }
 
 function getGlobalCount() {
@@ -55,12 +58,12 @@ function isLoading(swrResponse) {
   return status === requestStatus.LOADING
 }
 
-function isSuccess(swrResponse) {
+function isSuccess(swrResponse) {
   const status = toFriendlyStatus(swrResponse)
   return status === requestStatus.SUCCESS
 }
 
-function getResult(swrResponse, defaultResult = {}) {
+function getResult(swrResponse, defaultResult = {}) {
   return swrResponse?.data?.result ?? defaultResult
 }
 
@@ -80,6 +83,7 @@ export default {
   isSuccess,
   getResult,
   setResult,
+  getGlobal,
   getGlobalCount,
   getGlobalLatest,
   getCountry,

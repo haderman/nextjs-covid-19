@@ -25,7 +25,7 @@ export default function FavoriteButton({ iso, size = "size-m"}) {
 
   const iconStyle = [
     size,
-    isFavorite ? "stroke-green" : ""
+    isFavorite ? "app_heart_icon_fill_primary" : ""
   ].join(" ")
 
   return (

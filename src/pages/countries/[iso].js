@@ -16,8 +16,6 @@ import Stack from "components/common/stack"
 import Numeric from "components/common/numeric"
 import Chip from "components/common/chip"
 import Inline from "components/common/inline";
-import useCountryTimeSeries from "api/hooks/useCountryTimeSeries"
-import useCountrySummary from "api/hooks/useCountrySummary"
 import useMounted from "hooks/useMounted"
 import useScreen, { screenType } from "hooks/useScreen"
 import api from "api/api"
@@ -26,15 +24,29 @@ import * as color from "utils/color"
 import settings from "utils/settings"
 import orientation from "utils/orientation"
 
-export async function getServerSideProps({ params: { iso } }) {
-  return { props: { iso } }
+import countryNameToIso from "data/country_name_to_iso.json"
+
+export async function getStaticProps({ params: { iso } }) {
+  const response = await api.getCountry(iso)()
+  const timeSeries = api.getResult(response)
+  return { props: { timeSeries, iso } }
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: Object.values(countryNameToIso).map(iso_ => (
+      { params: { iso: iso_  } }
+    )),
+    fallback: true,
+  }
 }
 
 Country.propTypes = {
-  iso: PropTypes.string
+  iso: PropTypes.string,
+  timeSeries: PropTypes.object,
 }
 
-export default function Country({ iso }) {
+export default function Country({ iso, timeSeries }) {
   const [chartOrientation, setChartOrientation] = settings.useChartOrientation()
   const handleClick = newOrientation => () => {
     setChartOrientation(newOrientation)
@@ -52,9 +64,9 @@ export default function Country({ iso }) {
       </Head>
       <Stack size={size.M}>
         <Header>
-          <h3>{iso}</h3>
+          <h2>{iso}</h2>
           {isLayoutButtonsVisible &&
-            <Inline as="span" size={size.M}>
+            <Inline as="span" size={size.S}>
               <button className="icon-button" onClick={handleClick(orientation.VERTICAL)}>
                 <LayoutVerticalIcon className={orientation.isVertical(chartOrientation) ? "stroke-primary" : ""} />
               </button>
@@ -64,7 +76,13 @@ export default function Country({ iso }) {
             </Inline>
           }
         </Header>
-        <TimeSeries iso={iso} chartOrientation={chartOrientation} />
+        {isMounted &&
+          <TimeSeriesChart
+            data={timeSeries}
+            iso={iso}
+            chartOrientation={chartOrientation}
+          />
+        }
       </Stack>
     </>
   )
@@ -90,67 +108,25 @@ function Header({ children }) {
   )
 }
 
-TimeSeries.propTypes = {
-  iso: PropTypes.string,
-  chartOrientation: orientation.isOrientation,
-}
-
-function TimeSeries({ iso, chartOrientation }) {
-  const timeSeries = useCountryTimeSeries(iso)
-
-  if (api.isError(timeSeries)) {
-    return <TimeSeriesError error={timeSeries.error} />
-  }
-
-  if (api.isLoading(timeSeries)) {
-    return <TimeSeriesLoading />
-  }
-
-  if (api.isSuccess(timeSeries)) {
-    return (
-      <TimeSeriesChart
-        data={api.getResult(timeSeries)}
-        iso={iso}
-        chartOrientation={chartOrientation}
-      />
-    )
-  }
-
-  return null
-}
-
-TimeSeriesError.propTypes = {
-  error: PropTypes.string
-}
-
-function TimeSeriesError({ error }) {
-  return <div>Error: {error}</div>
-}
-
-function TimeSeriesLoading() {
-  return <div>Loading..</div>
-}
-
 TimeSeriesChart.propTypes = {
   data: PropTypes.object,
   iso: PropTypes.string,
   chartOrientation: orientation.isOrientation,
 }
 
-function TimeSeriesChart({ data, iso, chartOrientation}) {
+function TimeSeriesChart({ data = {}, chartOrientation}) {
   const byAscendingDates = (a,b) => a > b ? -1 : a < b ? 1 : 0
   const data_ = Object.entries(data)
     .map(([date, value]) => ({ ...value, date }))
     .map(item => ({ ...item, actives: item.confirmed - item.recovered - item.deaths }))
     .sort(byAscendingDates)
 
-  const countrySummary = useCountrySummary(iso)
-  const summary = api.getResult(countrySummary)
+  const summary = calculateSummary(data_)
   const Layout = orientation.isVertical(chartOrientation) ? VerticalLayout : HorizontalLayout
 
   return (
     <Layout>
-      <article id="main-area-chart" className="inset-m border-s border-color-soft rounded">
+      <article id="main-area-chart">
         <ResponsiveContainer>
           <AreaChart id="test" data={data_} margin={{top: 10, right: 0, left: 10, bottom: 0}}>
             <defs>
@@ -305,4 +281,36 @@ function Card(props) {
       </div>
     </article>
   )
+}
+
+
+// HELPERS
+
+/**
+ *
+ * @param {Object[]} stats - Basic stats
+ * @param {Object[].confirmed}
+ * @param {Object[].deaths}
+ * @param {Object[].recovered}
+ * @returns {Object[]} statsExtended - Basic stats with new cases compared with the last day
+ * @param {Object[].confirmed} -
+ * @param {Object[].deaths} -
+ * @param {Object[].recovered} -
+ * @param {Object[].actives} -
+ * @param {Object[].newConfirmed} -
+ * @param {Object[].newDeaths} -
+ * @param {Object[].newRecovered} -
+ */
+function calculateSummary(data) {
+  const [lastest, penultimate] = ([...data]).reverse()
+  console.log("data length: ", data.length)
+  console.log("latest: ", lastest)
+  console.log("penultimate: ", penultimate)
+  return {
+    ...lastest,
+    newConfirmed: lastest.confirmed - penultimate.confirmed,
+    newDeaths: lastest.deaths - penultimate.deaths,
+    newRecovered: lastest.recovered - penultimate.recovered,
+    actives: lastest.confirmed - lastest.recovered - lastest.deaths
+  }
 }
