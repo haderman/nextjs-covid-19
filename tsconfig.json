@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "target": "es2016",
+    "module": "esnext",
+    "lib": [
+      "esnext"
+    ],
+    "strict": true,
+    "rootDir": ".",
+    "noEmit": true,
+    "plugins": [
+      {
+        "name": "nexus/typescript-language-service"
+      }
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "types.d.ts"
+  ]
+}

@@ -181,6 +181,7 @@ b { font-weight: bold; }
 button {
   border: none;
   cursor: pointer;
+  color: inherit;
   background-color: transparent;
 }
 

@@ -11,8 +11,12 @@
     "lint": "./node_modules/.bin/eslint src"
   },
   "dependencies": {
+    "@apollo/react-hooks": "^4.0.0",
+    "apollo-boost": "^0.4.9",
+    "apollo-server-micro": "^2.16.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "graphql": "^15.3.0",
     "next": "9.4.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -29,6 +33,7 @@
     "babel-plugin-inline-react-svg": "^1.1.1",
     "eslint": "^7.4.0",
     "eslint-plugin-react": "^7.20.3",
-    "eslint-plugin-react-hooks": "^4.0.8"
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "typescript": "^3.9.7"
   }
 }
