@@ -33,7 +33,7 @@ const LOGIN_USER = gql`
 
 export default function About() {
   const client = new ApolloClient({
-    uri: "http://localhost:3000/api/graphql-data",
+    uri: "/api/graphql-data",
     headers: {
       authorization: "", // localStorage.getItem('token') || "",
     }
