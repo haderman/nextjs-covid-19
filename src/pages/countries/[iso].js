@@ -1,5 +1,5 @@
-import PropTypes from "prop-types"
-import Head from 'next/head'
+import PropTypes from "prop-types";
+import Head from 'next/head';
 import {
   AreaChart,
   Area,
@@ -10,29 +10,46 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import LayoutHorizontalIcon from "../../icons/layout-navbar.svg"
-import LayoutVerticalIcon from "../../icons/layout-sidebar-right.svg"
-import Stack from "components/common/stack"
-import Numeric from "components/common/numeric"
-import Chip from "components/common/chip"
+import queryGraphql from "../../graphql/queryGraphql";
+import LayoutHorizontalIcon from "../../icons/layout-navbar.svg";
+import LayoutVerticalIcon from "../../icons/layout-sidebar-right.svg";
+import Stack from "components/common/stack";
+import Numeric from "components/common/numeric";
+import Chip from "components/common/chip";
 import Inline from "components/common/inline";
-import useMounted from "hooks/useMounted"
-import useScreen, { screenType } from "hooks/useScreen"
-import api from "api/api"
-import * as size from 'utils/size'
-import * as color from "utils/color"
-import settings from "utils/settings"
-import orientation from "utils/orientation"
+import useMounted from "hooks/useMounted";
+import useScreen, { screenType } from "hooks/useScreen";
+import api from "api/api";
+import * as size from 'utils/size';
+import * as color from "utils/color";
+import settings from "utils/settings";
+import orientation from "utils/orientation";
 
-import countryNameToIso from "data/country_name_to_iso.json"
+import countryNameToIso from "data/country_name_to_iso.json";
 
 export async function getStaticProps({ params: { iso } }) {
+  const countries = await queryGraphql(`
+    query {
+      allCountries {
+        name
+      }
+    }
+  `);
+
   const response = await api.getCountry(iso)()
   const timeSeries = api.getResult(response)
   return { props: { timeSeries, iso } }
 }
 
 export async function getStaticPaths() {
+  const countries = await queryGraphql(`
+    query {
+      allCountries {
+        name
+      }
+    }
+  `);
+
   return {
     paths: Object.values(countryNameToIso).map(iso_ => (
       { params: { iso: iso_  } }

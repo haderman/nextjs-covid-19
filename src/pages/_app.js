@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import { SWRConfig } from "swr"
+import { ApolloProvider } from "@apollo/react-hooks"
+import ApolloClient from "apollo-boost"
 
 import Layout from "components/layout"
 import AppState from "components/contexts/appState"
@@ -20,6 +22,10 @@ App.propTypes = {
 function App({ Component, pageProps }) {
   const store = { countryNameToIso, countryNameToFlag }
 
+  const client = new ApolloClient({
+    uri: "/api/graphql",
+  });
+
   return (
     <SWRConfig
       value={{
@@ -31,15 +37,17 @@ function App({ Component, pageProps }) {
         refreshInterval: 0
       }}
     >
-      <AppState.Provider value={store}>
-        <settings.Provider>
-          <favorites.Provider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </favorites.Provider>
-        </settings.Provider>
-      </AppState.Provider>
+      <ApolloProvider client={client}>
+        <AppState.Provider value={store}>
+          <settings.Provider>
+            <favorites.Provider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </favorites.Provider>
+          </settings.Provider>
+        </AppState.Provider>
+      </ApolloProvider>
     </SWRConfig>
   )
 }
