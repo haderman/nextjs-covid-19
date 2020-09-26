@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import useGlobalSummary from "api/hooks/useGlobalSummary"
-import api from "api/api"
 import * as size from "utils/size"
 import usePersistedState from "hooks/usePersistedState"
 import ActiveLinke from "./common/activeLink"
@@ -12,58 +10,44 @@ import CountriesList, { FavoritesCountriesList } from "./common/countriesList"
 import ListIcon from "../icons/list.svg"
 import HeartIcon from "../icons/heart.svg"
 
-function Sidebar() {
-  const globalSummary = useGlobalSummary()
+Sidebar.propTypes = {
+  allCountries: PropTypes.array,
+  worldTotalCases: PropTypes.object,
+  worldTotalNewCases:  PropTypes.object,
+};
 
+function Sidebar({ allCountries, worldTotalCases, worldTotalNewCases }) {
   return (
     <aside className="squish-inset-l">
       <Stack size={size.XL}>
-        <GlobalCount summary={globalSummary} />
-        <Countries />
+        <GlobalCases worldTotalCases={worldTotalCases} />
+        <Countries allCountries={allCountries} />
       </Stack>
     </aside>
   )
 }
 
-function GlobalCount() {
-  const summary = useGlobalSummary()
-
-  if (api.isLoading(summary)) {
-    return (
-      <section>
-        <div>loading</div>
-      </section>
-    )
-  }
-
-  if (api.isError(summary)) {
-    return (
-      <section>
-        <div>Error</div>
-      </section>
-    )
-  }
-
+function GlobalCases({ worldTotalCases }) {
   return (
     <Stack as="section" size={size.M}>
       <h2>Global cases</h2>
       <ActiveLinke href="/" passHref activeClassName="background-deep-1">
         <a className="">
-          <GlobalCountData {...api.getResult(summary.data)} />
+          <GlobalCasesData {...worldTotalCases} />
         </a>
       </ActiveLinke>
     </Stack>
   )
 }
 
-GlobalCountData.propTypes = {
+GlobalCasesData.propTypes = {
   confirmed: PropTypes.number,
   recovered: PropTypes.number,
   deaths: PropTypes.number,
+  actives: PropTypes.number,
 }
 
-function GlobalCountData({ confirmed, recovered, deaths }) {
-  const actives = confirmed - recovered - deaths
+function GlobalCasesData({ confirmed, recovered, deaths, actives }) {
   const activesPercentage = Math.floor((actives / confirmed) * 100)
   const deathsPercentage = Math.floor((deaths / confirmed) * 100)
 
@@ -107,15 +91,15 @@ function GlobalCountData({ confirmed, recovered, deaths }) {
   )
 }
 
-function Countries() {
+function Countries({ allCountries }) {
   const [activedTab, setActivedTab] = usePersistedState("sidebar-actived-tab", "all-countries")
   return (
     <Stack as="section" size={size.M}>
       <h2>Countries</h2>
       <Tabs value={activedTab} onChange={setActivedTab}/>
       {activedTab === "all-countries"
-        ? <CountriesList />
-        : <FavoritesCountriesList />
+        ? <CountriesList allCountries={allCountries} />
+        : <FavoritesCountriesList allCountries={allCountries} />
       }
     </Stack>
   )

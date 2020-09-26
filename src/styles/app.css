@@ -10,6 +10,10 @@ svg.icon-s {
   /* stroke: var(--color-primary); */
 }
 
+img.icon-s {
+  width: 18px;
+}
+
 svg.icon {
   stroke-width: 1px;
 }
