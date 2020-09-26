@@ -74,7 +74,7 @@ desktop: 1920px;
     height: 100vh;
     column-gap: 40px;
     grid-template-rows: 60px auto;
-    grid-template-columns: clamp(300px, 20vw, 400px) 3fr;
+    grid-template-columns: clamp(310px, 20vw, 400px) 3fr;
     grid-template-areas:
       "header  header"
       "sidebar main"

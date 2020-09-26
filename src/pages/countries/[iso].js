@@ -9,105 +9,267 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+import classNames from "classnames";
 import queryGraphql from "../../graphql/queryGraphql";
 import LayoutHorizontalIcon from "../../icons/layout-navbar.svg";
 import LayoutVerticalIcon from "../../icons/layout-sidebar-right.svg";
+import Layout from "components/layout";
 import Stack from "components/common/stack";
 import Numeric from "components/common/numeric";
 import Chip from "components/common/chip";
 import Inline from "components/common/inline";
 import useMounted from "hooks/useMounted";
 import useScreen, { screenType } from "hooks/useScreen";
-import api from "api/api";
 import * as size from 'utils/size';
 import * as color from "utils/color";
 import settings from "utils/settings";
 import orientation from "utils/orientation";
 
-import countryNameToIso from "data/country_name_to_iso.json";
-
-export async function getStaticProps({ params: { iso } }) {
-  const countries = await queryGraphql(`
-    query {
-      allCountries {
-        name
-      }
-    }
-  `);
-
-  const response = await api.getCountry(iso)()
-  const timeSeries = api.getResult(response)
-  return { props: { timeSeries, iso } }
-}
-
 export async function getStaticPaths() {
-  const countries = await queryGraphql(`
+  const { allCountries } = await queryGraphql(`
     query {
       allCountries {
-        name
+        iso
       }
     }
   `);
 
   return {
-    paths: Object.values(countryNameToIso).map(iso_ => (
-      { params: { iso: iso_  } }
+    paths: allCountries.map(({ iso }) => (
+      { params: { iso } }
     )),
     fallback: true,
-  }
+  };
+}
+
+export async function getStaticProps({ params: { iso } }) {
+  const data = await queryGraphql(`
+    query($iso: String) {
+      country(iso: $iso) {
+        info {
+          name
+        }
+        totalCases {
+          ...CasesFields
+        }
+        newCases {
+          ...CasesFields
+        }
+        timeserie {
+          date
+          cases {
+            ...CasesFields
+          }
+        }
+      }
+      allCountries {
+        iso
+        totalCases {
+          ...CasesFields
+        }
+        info {
+          name
+          flag
+        }
+      }
+      worldTotalCases {
+        ...CasesFields
+      }
+      worldTotalNewCases {
+        ...CasesFields
+      }
+    }
+    fragment CasesFields on Cases {
+      confirmed
+      deaths
+      recovered
+      actives
+    }
+  `,
+    { iso }
+  );
+
+  return { props: data }
 }
 
 Country.propTypes = {
-  iso: PropTypes.string,
-  timeSeries: PropTypes.object,
-}
+  country: PropTypes.object,
+  allCountries: PropTypes.array,
+  worldTotalCases: PropTypes.object,
+  worldTotalNewCases:  PropTypes.object,
+};
 
-export default function Country({ iso, timeSeries }) {
-  const [chartOrientation, setChartOrientation] = settings.useChartOrientation()
-  const handleClick = newOrientation => () => {
-    setChartOrientation(newOrientation)
-  }
-
-  const isMounted = useMounted()
-  const screen = useScreen()
-  const isLayoutButtonsVisible =
-    isMounted && screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP
+export default function Country({ country, allCountries, worldTotalCases, worldTotalNewCases }) {
+  if (!country) return null;
 
   return (
-    <>
+    <Layout
+      sidebarProps={{
+        allCountries: allCountries,
+        worldTotalCases: worldTotalCases,
+        worldTotalNewCases: worldTotalNewCases,
+      }}
+    >
       <Head>
-        <title>{iso}</title>
+        <title>{country.info.name}</title>
       </Head>
-      <Stack size={size.M}>
-        <Header>
-          <h2>{iso}</h2>
-          {isLayoutButtonsVisible &&
-            <Inline as="span" size={size.S}>
-              <button className="icon-button" onClick={handleClick(orientation.VERTICAL)}>
-                <LayoutVerticalIcon className={orientation.isVertical(chartOrientation) ? "stroke-primary" : ""} />
-              </button>
-              <button className="icon-button" onClick={handleClick(orientation.HORIZONTAL)}>
-                <LayoutHorizontalIcon className={orientation.isHorizontal(chartOrientation) ? "stroke-primary" : ""} />
-              </button>
-            </Inline>
-          }
-        </Header>
-        {isMounted &&
-          <TimeSeriesChart
-            data={timeSeries}
-            iso={iso}
-            chartOrientation={chartOrientation}
-          />
-        }
-      </Stack>
-    </>
+      <ChartLayout title={country.info.name}>
+        <Chart timeserie={country.timeserie} />
+        <Cards
+          timeserie={country.timeserie}
+          totalCases={country.totalCases}
+          newCases={country.newCases}
+        />
+      </ChartLayout>
+    </Layout>
   )
 }
 
-Header.propTypes = {
-  children: PropTypes.node
+ChartLayout.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.node,
+};
+
+function ChartLayout({ title, children }) {
+  const [chartOrientation, setChartOrientation] = settings.useChartOrientation();
+  const handleClick = newOrientation => () => {
+    setChartOrientation(newOrientation);
+  };
+  const isMounted = useMounted();
+  const screen = useScreen();
+  const isLayoutButtonsVisible = (
+    isMounted &&
+    screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP
+  );
+  return (
+    <Stack size={size.M} as="section">
+      <Header>
+        <h2>{title}</h2>
+        {isLayoutButtonsVisible &&
+          <Inline as="span" size={size.S}>
+            <button className="icon-button" onClick={handleClick(orientation.VERTICAL)}>
+              <LayoutVerticalIcon className={orientation.isVertical(chartOrientation) ? "stroke-primary" : ""} />
+            </button>
+            <button className="icon-button" onClick={handleClick(orientation.HORIZONTAL)}>
+              <LayoutHorizontalIcon className={orientation.isHorizontal(chartOrientation) ? "stroke-primary" : ""} />
+            </button>
+          </Inline>
+        }
+      </Header>
+      {isMounted &&
+        <section
+          key={orientation.isVertical(chartOrientation) ? "vertical" : "horizontal" }
+          className={
+            classNames("full-width full-height", {
+              "layout-area-charts-vertical": orientation.isVertical(chartOrientation),
+              "layout-area-charts-horizontal": orientation.isHorizontal(chartOrientation),
+            })
+          }
+        >
+          {children}
+        </section>
+      }
+    </Stack>
+  );
 }
+
+Chart.propTypes = {
+  timeserie: PropTypes.array,
+};
+
+function Chart({ timeserie }) {
+  return (
+    <article id="main-area-chart">
+      <ResponsiveContainer>
+        <AreaChart id="test" data={timeserie} margin={{top: 10, right: 0, left: 10, bottom: 0}}>
+          <defs>
+            <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color.toHSL(color.RED)} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={color.toHSL(color.RED)} stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorRecovered" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color.toHSL(color.GREEN)} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={color.toHSL(color.GREEN)} stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorActives" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color.toHSL(color.ORANGE)} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={color.toHSL(color.ORANGE)} stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorDeaths" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color.toHSL(color.GRAY)} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={color.toHSL(color.GRAY)} stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke="#333" strokeDasharray="2 2" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Area type="monotone" stackId="1" dataKey="cases.confirmed" stroke={color.toHSL(color.RED)} fill="url(#colorConfirmed)" />
+          <Area type="monotone" stackId="2" dataKey="cases.recovered" stroke={color.toHSL(color.GREEN)} fill="url(#colorRecovered)" />
+          <Area type="monotone" stackId="3" dataKey="cases.actives" stroke={color.toHSL(color.ORANGE)} fill="url(#colorActives)" />
+          <Area type="monotone" stackId="4" dataKey="cases.deaths" stroke={color.toHSL(color.GRAY)} fill="url(#colorDeaths)" />
+        </AreaChart>
+      </ResponsiveContainer>
+    </article>
+  );
+}
+
+Cards.propTypes = {
+  timeserie: PropTypes.array,
+  totalCases: PropTypes.object,
+  newCases: PropTypes.object,
+};
+
+function Cards({ totalCases, newCases, timeserie }) {
+  return (
+    <>
+      <Card
+        id="area-chart-1"
+        title="Confirmed cases"
+        primaryText={totalCases.confirmed}
+        secondaryText={newCases.confirmed}
+        primaryColor={color.RED}
+        secondaryColor={color.RED_SOFT}
+        timeSeries={timeserie}
+        dataKey="cases.confirmed"
+      />
+      <Card
+        id="area-chart-2"
+        title="Active cases"
+        primaryText={totalCases.actives}
+        secondaryText={newCases.actives}
+        primaryColor={color.ORANGE}
+        secondaryColor={color.ORANGE_SOFT}
+        timeSeries={timeserie}
+        dataKey="cases.actives"
+      />
+      <Card
+        id="area-chart-3"
+        title="Recovered cases"
+        primaryText={totalCases.recovered}
+        secondaryText={newCases.recovered}
+        primaryColor={color.GREEN}
+        secondaryColor={color.GREEN_SOFT}
+        timeSeries={timeserie}
+        dataKey="cases.recovered"
+      />
+      <Card
+        id="area-chart-4"
+        title="Death cases"
+        primaryText={totalCases.deaths}
+        secondaryText={newCases.deaths}
+        primaryColor={color.GRAY}
+        secondaryColor={color.GRAY_SOFT}
+        timeSeries={timeserie}
+        dataKey="cases.deaths"
+      />
+    </>
+  );
+}
+
+Header.propTypes = {
+  children: PropTypes.node,
+};
 
 function Header({ children }) {
   const style = [
@@ -116,131 +278,13 @@ function Header({ children }) {
     "justify-space-between",
     "align-center",
     "full-width",
-  ].join(" ")
+  ].join(" ");
 
   return (
     <header className={style}>
       {children}
     </header>
-  )
-}
-
-TimeSeriesChart.propTypes = {
-  data: PropTypes.object,
-  iso: PropTypes.string,
-  chartOrientation: orientation.isOrientation,
-}
-
-function TimeSeriesChart({ data = {}, chartOrientation}) {
-  const byAscendingDates = (a,b) => a > b ? -1 : a < b ? 1 : 0
-  const data_ = Object.entries(data)
-    .map(([date, value]) => ({ ...value, date }))
-    .map(item => ({ ...item, actives: item.confirmed - item.recovered - item.deaths }))
-    .sort(byAscendingDates)
-
-  const summary = calculateSummary(data_)
-  const Layout = orientation.isVertical(chartOrientation) ? VerticalLayout : HorizontalLayout
-
-  return (
-    <Layout>
-      <article id="main-area-chart">
-        <ResponsiveContainer>
-          <AreaChart id="test" data={data_} margin={{top: 10, right: 0, left: 10, bottom: 0}}>
-            <defs>
-              <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color.toHSL(color.RED)} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={color.toHSL(color.RED)} stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorRecovered" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color.toHSL(color.GREEN)} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={color.toHSL(color.GREEN)} stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorActives" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color.toHSL(color.ORANGE)} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={color.toHSL(color.ORANGE)} stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorDeaths" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color.toHSL(color.GRAY)} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={color.toHSL(color.GRAY)} stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="#333" strokeDasharray="2 2" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Area type="monotone" stackId="1" dataKey="confirmed" stroke={color.toHSL(color.RED)} fill="url(#colorConfirmed)" />
-            <Area type="monotone" stackId="2" dataKey="recovered" stroke={color.toHSL(color.GREEN)} fill="url(#colorRecovered)" />
-            <Area type="monotone" stackId="3" dataKey="actives" stroke={color.toHSL(color.ORANGE)} fill="url(#colorActives)" />
-            <Area type="monotone" stackId="4" dataKey="deaths" stroke={color.toHSL(color.GRAY)} fill="url(#colorDeaths)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </article>
-      <Card
-        id="area-chart-1"
-        title="Confirmed cases"
-        primaryText={summary.confirmed}
-        secondaryText={summary.newConfirmed}
-        primaryColor={color.RED}
-        secondaryColor={color.RED_SOFT}
-        timeSeries={data_}
-        dataKey="confirmed"
-      />
-      <Card
-        id="area-chart-2"
-        title="Active cases"
-        primaryText={summary.confirmed - summary.recovered - summary.deaths}
-        secondaryText={summary.newConfirmed - summary.newRecovered - summary.newDeaths}
-        primaryColor={color.ORANGE}
-        secondaryColor={color.ORANGE_SOFT}
-        timeSeries={data_}
-        dataKey="actives"
-      />
-      <Card
-        id="area-chart-3"
-        title="Recovered cases"
-        primaryText={summary.recovered}
-        secondaryText={summary.newRecovered}
-        primaryColor={color.GREEN}
-        secondaryColor={color.GREEN_SOFT}
-        timeSeries={data_}
-        dataKey="recovered"
-      />
-      <Card
-        id="area-chart-4"
-        title="Death cases"
-        primaryText={summary.deaths}
-        secondaryText={summary.newDeaths}
-        primaryColor={color.GRAY}
-        secondaryColor={color.GRAY_SOFT}
-        timeSeries={data_}
-        dataKey="deaths"
-      />
-    </Layout>
-  )
-}
-
-VerticalLayout.propTypes = {
-  children: PropTypes.node
-}
-
-function VerticalLayout({ children }) {
-  return (
-    <section key="vertical" className="layout-area-charts-vertical full-width full-height">
-      {children}
-    </section>
-  )
-}
-
-HorizontalLayout.propTypes = {
-  children: PropTypes.node
-}
-
-function HorizontalLayout({ children }) {
-  return (
-    <section key="horizontal" className="layout-area-charts-horizontal full-width full-height">
-      {children}
-    </section>
-  )
+  );
 }
 
 Card.propTypes = {
@@ -252,7 +296,7 @@ Card.propTypes = {
   timeSeries: PropTypes.array,
   dataKey: PropTypes.string,
   id: PropTypes.string,
-}
+};
 
 function Card(props) {
   const {
@@ -264,7 +308,7 @@ function Card(props) {
     timeSeries,
     dataKey,
     id
-  } = props
+  } = props;
 
   return (
     <article id={id} className="inset-m rounded border-s border-color-soft">
@@ -297,37 +341,5 @@ function Card(props) {
         </ResponsiveContainer>
       </div>
     </article>
-  )
-}
-
-
-// HELPERS
-
-/**
- *
- * @param {Object[]} stats - Basic stats
- * @param {Object[].confirmed}
- * @param {Object[].deaths}
- * @param {Object[].recovered}
- * @returns {Object[]} statsExtended - Basic stats with new cases compared with the last day
- * @param {Object[].confirmed} -
- * @param {Object[].deaths} -
- * @param {Object[].recovered} -
- * @param {Object[].actives} -
- * @param {Object[].newConfirmed} -
- * @param {Object[].newDeaths} -
- * @param {Object[].newRecovered} -
- */
-function calculateSummary(data) {
-  const [lastest, penultimate] = ([...data]).reverse()
-  console.log("data length: ", data.length)
-  console.log("latest: ", lastest)
-  console.log("penultimate: ", penultimate)
-  return {
-    ...lastest,
-    newConfirmed: lastest.confirmed - penultimate.confirmed,
-    newDeaths: lastest.deaths - penultimate.deaths,
-    newRecovered: lastest.recovered - penultimate.recovered,
-    actives: lastest.confirmed - lastest.recovered - lastest.deaths
-  }
+  );
 }

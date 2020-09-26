@@ -1,5 +1,4 @@
-import { useAppState } from "../contexts/appState"
-import useGlobalLatestData from "api/hooks/useGlobalLatestData"
+import PropTypes from 'prop-types';
 import ActiveLink from "./activeLink"
 import Stack from "./stack"
 import Chip from "./chip"
@@ -8,64 +7,50 @@ import useMounted from "hooks/useMounted"
 import * as size from "utils/size"
 import * as color from "utils/color"
 import favorites from "utils/favorites"
-import api from "api/api"
 import Inline from "./inline"
 import FavoriteButton from "./favoriteButton"
 
-
-function useCountriesListData() {
-  const { countryNameToIso, countryNameToFlag } = useAppState()
-  const latestInfoByCountry = useGlobalLatestData()
-
-  function composeCountry([name, iso]) {
-    return {
-      iso,
-      name,
-      flag: countryNameToFlag?.[name]?.flag ?? "🏳️",
-      ...(api.getResult(latestInfoByCountry)?.[iso] ?? {})
-    }
-  }
-
-  function highToLow(a, b) {
-    return (b.confirmed || 0) - (a.confirmed || 0)
-  }
-
-  return Object
-    .entries(countryNameToIso)
-    .map(composeCountry)
-    .sort(highToLow)
+function descending(a, b) {
+  return b.totalCases.confirmed - a.totalCases.confirmed;
 }
 
-export default function CountriesList() {
-  const countriesList = useCountriesListData()
+CountriesList.propTypes = {
+  allCountries: PropTypes.array,
+};
 
+export default function CountriesList({ allCountries }) {
   return (
     <Stack as="ul" size={size.S}>
-      {countriesList.map(country =>
-        <li key={country.name} className="full-width hover-control hover-control-adjacents">
-          <DetailRow country={country} />
-        </li>
-      )}
+      {allCountries
+        .sort(descending)
+        .map(country =>
+          <li key={country.iso} className="full-width hover-control hover-control-adjacents">
+            <DetailRow country={country} />
+          </li>
+        )}
     </Stack>
-  )
+  );
 }
 
-export function FavoritesCountriesList() {
-  const countriesList = useCountriesListData()
-  const favoritesList = favorites.useFavoritesList()
-  const isFavorite = country => favoritesList.values.includes(country.iso)
+FavoritesCountriesList.propTypes = {
+  allCountries: PropTypes.array,
+};
+
+export function FavoritesCountriesList({ allCountries }) {
+  const favoritesList = favorites.useFavoritesList();
+  const isFavorite = country => favoritesList.values.includes(country.iso);
 
   return (
     <Stack as="ul" size={size.S}>
-      {countriesList
+      {allCountries
         .filter(isFavorite)
         .map(country =>
-          <li key={country.name} className="full-width hover-control">
+          <li key={country.iso} className="full-width hover-control">
             <DetailRow country={country} />
           </li>
       )}
     </Stack>
-  )
+  );
 }
 
 function DetailRow({ country }) {
@@ -80,11 +65,14 @@ function DetailRow({ country }) {
     >
       <a className="flex justify-space-between align-center stretch-inset-m rounded background-interactive:hover">
         <Inline size={size.L}>
-          <span className="text-l">
-            {country.flag}
-          </span>
+          <img
+            loading="lazy"
+            className="icon-s"
+            src={country.info.flag}
+            alt={`Flag of ${country.info.name}`}
+          />
           <Stack as="span" size={size.S}>
-            <p className="text-m">{country.name}</p>
+            <p className="text-m">{country.info.name}</p>
             <p className="text-xs text-secondary">
               <span>Confirmed: </span>
               <Chip
@@ -92,7 +80,7 @@ function DetailRow({ country }) {
                 rounded={size.XL}
                 background={color.RED_SOFT}
               >
-                <Numeric value={country.confirmed} />
+                <Numeric value={country.totalCases.confirmed} />
               </Chip>
             </p>
           </Stack>

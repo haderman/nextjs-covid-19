@@ -2,18 +2,19 @@ import { gql } from "apollo-server-micro";
 
 const typeDefs = gql`
   type Query {
-    hello: String
     allCountries: [Country]
-    country(name: String): Country
+    country(iso: String): Country
     worldTotalCases: Cases
     worldTotalNewCases: Cases
+    worldTimeserie: [DailyCase]
   }
 
   type Country {
-    name: String
+    iso: String
     timeserie: [DailyCase]
     totalCases: Cases
     newCases: Cases
+    info: CountryInfo
   }
 
   type DailyCase {
@@ -26,6 +27,14 @@ const typeDefs = gql`
     deaths: Int
     recovered: Int
     actives: Int
+  }
+
+  type CountryInfo {
+    name: String
+    flag: String
+    population: Int
+    region: String
+    subregion: String
   }
 `;
 

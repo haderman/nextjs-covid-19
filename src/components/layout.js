@@ -6,10 +6,11 @@ import useScreen, { screenType } from "../hooks/useScreen"
 import useMounted from "../hooks/useMounted"
 
 Layout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  sidebarProps: PropTypes.object,
 }
 
-export default function Layout({ children }) {
+export default function Layout({ children, sidebarProps }) {
   const screen = useScreen()
   const isMounted = useMounted()
   const isBottomNavigationVisible = isMounted && screen === screenType.PHONE
@@ -20,7 +21,7 @@ export default function Layout({ children }) {
     <div className="layout theme-dark background-deep-1 text-primary">
       <Header />
       {isSidebarVisible &&
-        <Sidebar />
+        <Sidebar {...sidebarProps} />
       }
       <main className="squish-inset-l">{children}</main>
       {isBottomNavigationVisible &&
