@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import Layout from "components/layout";
 import { FavoritesCountriesList } from "components/common/countriesList"
 import queryGraphql from "../graphql/queryGraphql";
 
@@ -39,9 +38,5 @@ Favorites.propTypes = {
 };
 
 export default function Favorites({ allCountries }) {
-  return (
-    <Layout>
-      <FavoritesCountriesList allCountries={allCountries} />
-    </Layout>
-  )
+  return <FavoritesCountriesList allCountries={allCountries} />;
 }

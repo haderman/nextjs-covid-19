@@ -13,7 +13,6 @@ import classNames from "classnames";
 import queryGraphql from "../../graphql/queryGraphql";
 import LayoutHorizontalIcon from "../../icons/layout-navbar.svg";
 import LayoutVerticalIcon from "../../icons/layout-sidebar-right.svg";
-import Layout from "components/layout";
 import Stack from "components/common/stack";
 import Numeric from "components/common/numeric";
 import Chip from "components/common/chip";
@@ -62,22 +61,6 @@ export async function getStaticProps({ params: { iso } }) {
           }
         }
       }
-      allCountries {
-        iso
-        totalCases {
-          ...CasesFields
-        }
-        info {
-          name
-          flag
-        }
-      }
-      worldTotalCases {
-        ...CasesFields
-      }
-      worldTotalNewCases {
-        ...CasesFields
-      }
     }
     fragment CasesFields on Cases {
       confirmed
@@ -94,26 +77,15 @@ export async function getStaticProps({ params: { iso } }) {
 
 Country.propTypes = {
   country: PropTypes.object,
-  allCountries: PropTypes.array,
-  worldTotalCases: PropTypes.object,
-  worldTotalNewCases:  PropTypes.object,
 };
 
-export default function Country({ country, allCountries, worldTotalCases, worldTotalNewCases }) {
-  if (!country) return null;
-
+export default function Country({ country = {} }) {
   return (
-    <Layout
-      sidebarProps={{
-        allCountries: allCountries,
-        worldTotalCases: worldTotalCases,
-        worldTotalNewCases: worldTotalNewCases,
-      }}
-    >
+    <>
       <Head>
-        <title>{country.info.name}</title>
+        <title>{country.info?.name ?? ""}</title>
       </Head>
-      <ChartLayout title={country.info.name}>
+      <ChartLayout title={country.info?.name ?? ""}>
         <Chart timeserie={country.timeserie} />
         <Cards
           timeserie={country.timeserie}
@@ -121,7 +93,7 @@ export default function Country({ country, allCountries, worldTotalCases, worldT
           newCases={country.newCases}
         />
       </ChartLayout>
-    </Layout>
+    </>
   )
 }
 
@@ -178,6 +150,8 @@ Chart.propTypes = {
 };
 
 function Chart({ timeserie }) {
+  if (!timeserie) return null;
+
   return (
     <article id="main-area-chart">
       <ResponsiveContainer>
@@ -221,6 +195,7 @@ Cards.propTypes = {
 };
 
 function Cards({ totalCases, newCases, timeserie }) {
+  if (!totalCases) return null;
   return (
     <>
       <Card

@@ -4,7 +4,10 @@ import resolvers from "../../graphql/resolvers";
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema,
+  uploads: false, // https://www.apollographql.com/docs/apollo-server/migration-file-uploads/
+});
 
 export const config = {
   api: {
@@ -15,3 +18,4 @@ export const config = {
 const handler = server.createHandler({ path: "/api/graphql" });
 
 export default handler;
+

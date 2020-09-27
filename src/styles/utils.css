@@ -129,6 +129,7 @@ html {
   background-color: #333;
   box-sizing: border-box;
   overflow-y: scroll;
+  font-display: swap;
 }
 body {
   margin: 0;

@@ -11,7 +11,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import queryGraphql from "../graphql/queryGraphql";
-import Layout from "../components/layout";
 import LayoutHorizontalIcon from "../icons/layout-navbar.svg";
 import LayoutVerticalIcon from "../icons/layout-sidebar-right.svg";
 import Stack from "components/common/stack";
@@ -28,22 +27,6 @@ import orientation from "utils/orientation";
 export async function getStaticProps() {
   const data = await queryGraphql(`
     query {
-      allCountries {
-        iso
-        info {
-          name
-          flag
-        }
-        totalCases {
-          ...CasesFields
-        }
-        timeserie {
-          date
-          cases {
-            ...CasesFields
-          }
-        }
-      }
       worldTotalCases {
         ...CasesFields
       }
@@ -69,21 +52,14 @@ export async function getStaticProps() {
 }
 
 Home.propTypes = {
-  allCountries: PropTypes.array,
   worldTotalCases: PropTypes.object,
   worldTotalNewCases:  PropTypes.object,
   worldTimeserie: PropTypes.array,
 };
 
-export default function Home({ allCountries, worldTotalCases, worldTotalNewCases, worldTimeserie }) {
+export default function Home({ worldTotalCases, worldTotalNewCases, worldTimeserie }) {
   return (
-    <Layout
-      sidebarProps={{
-        allCountries: allCountries,
-        worldTotalCases: worldTotalCases,
-        worldTotalNewCases: worldTotalNewCases,
-      }}
-    >
+    <>
       <Head>
         <title>World tolta cases</title>
       </Head>
@@ -95,7 +71,7 @@ export default function Home({ allCountries, worldTotalCases, worldTotalNewCases
           newCases={worldTotalNewCases}
         />
       </ChartLayout>
-    </Layout>
+    </>
   )
 }
 

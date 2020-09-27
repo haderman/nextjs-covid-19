@@ -16,7 +16,7 @@ Sidebar.propTypes = {
   worldTotalNewCases:  PropTypes.object,
 };
 
-function Sidebar({ allCountries, worldTotalCases, worldTotalNewCases }) {
+export default function Sidebar({ allCountries, worldTotalCases, worldTotalNewCases }) {
   return (
     <aside className="squish-inset-l">
       <Stack size={size.XL}>
@@ -150,4 +150,3 @@ function Tabs({ value, onChange }) {
   )
 }
 
-export default Sidebar

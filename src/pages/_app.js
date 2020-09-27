@@ -1,30 +1,62 @@
-import PropTypes from 'prop-types'
-import { ApolloProvider } from "@apollo/react-hooks"
-import ApolloClient from "apollo-boost"
-import settings from "utils/settings"
-import favorites from "utils/favorites"
-import "styles/utils.css"
-import "styles/layouts.css"
-import "styles/app.css"
+import App from 'next/app';
+import PropTypes from 'prop-types';
+import queryGraphql from "../graphql/queryGraphql";
+import Layout from "components/layout";
+import settings from "utils/settings";
+import favorites from "utils/favorites";
+import "styles/utils.css";
+import "styles/layouts.css";
+import "styles/app.css";
 
-App.propTypes = {
+MyApp.propTypes = {
   Component: PropTypes.func,
   pageProps: PropTypes.object,
+  allCountries: PropTypes.array,
+  worldTotalCases: PropTypes.object,
+};
+
+MyApp.getInitialProps = async (appContext) => {
+  const data = await queryGraphql(`
+    query {
+      allCountries {
+        iso
+        info {
+          name
+          flag
+        }
+        totalCases {
+          ...CasesFields
+        }
+      }
+      worldTotalCases {
+        ...CasesFields
+      }
+      worldTotalNewCases {
+        ...CasesFields
+      }
+    }
+    fragment CasesFields on Cases {
+      confirmed
+      deaths
+      recovered
+      actives
+    }
+  `);
+
+  const appProps = await App.getInitialProps(appContext);
+
+  return { ...appProps, ...data };
 }
 
-function App({ Component, pageProps }) {
-  const client = new ApolloClient({
-    uri: "/api/graphql",
-  });
+export default function MyApp({ Component, pageProps, allCountries, worldTotalCases }) {
   return (
-    <ApolloProvider client={client}>
-      <settings.Provider>
-        <favorites.Provider>
+    <settings.Provider>
+      <favorites.Provider>
+        <Layout sidebarProps={{ allCountries, worldTotalCases }}>
           <Component {...pageProps} />
-        </favorites.Provider>
-      </settings.Provider>
-    </ApolloProvider>
-  )
+        </Layout>
+      </favorites.Provider>
+    </settings.Provider>
+  );
 }
 
-export default App
