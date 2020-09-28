@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import Sidebar from "./sidebar"
 import BottomNavigation from "./bottomNavigation"
 import Header from "./header"
-import useScreen, { screenType } from "../hooks/useScreen"
+import useScreen from "../hooks/useScreen"
 import useMounted from "../hooks/useMounted"
 
 Layout.propTypes = {
@@ -11,12 +11,10 @@ Layout.propTypes = {
 }
 
 export default function Layout({ children, sidebarProps }) {
-  const screen = useScreen()
-  const isMounted = useMounted()
-  const isBottomNavigationVisible = isMounted && screen === screenType.PHONE
-  const isSidebarVisible = isMounted &&
-    (screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP)
-
+  const screen = useScreen();
+  const isMounted = useMounted();
+  const isBottomNavigationVisible = isMounted && screen.isPhone();
+  const isSidebarVisible = isMounted && (screen.isDesktop() || screen.isBigDesktop());
   return (
     <div className="layout theme-dark background-deep-1 text-primary">
       <Header />

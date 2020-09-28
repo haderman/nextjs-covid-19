@@ -18,7 +18,7 @@ import Numeric from "components/common/numeric";
 import Chip from "components/common/chip";
 import Inline from "components/common/inline";
 import useMounted from "hooks/useMounted";
-import useScreen, { screenType } from "hooks/useScreen";
+import useScreen from "hooks/useScreen";
 import * as size from 'utils/size';
 import * as color from "utils/color";
 import settings from "utils/settings";
@@ -111,7 +111,7 @@ function ChartLayout({ title, children }) {
   const screen = useScreen();
   const isLayoutButtonsVisible = (
     isMounted &&
-    screen === screenType.DESKTOP || screen === screenType.BIG_DESKTOP
+    screen.isDesktop() || screen.isBigDesktop()
   );
   return (
     <Stack size={size.M} as="section">
@@ -150,6 +150,8 @@ Chart.propTypes = {
 };
 
 function Chart({ timeserie }) {
+  const screen = useScreen();
+
   if (!timeserie) return null;
 
   return (
@@ -176,7 +178,7 @@ function Chart({ timeserie }) {
           </defs>
           <CartesianGrid stroke="#333" strokeDasharray="2 2" />
           <XAxis dataKey="date" />
-          <YAxis />
+          {screen.isPhone() && <YAxis />}
           <Tooltip />
           <Area type="monotone" stackId="1" dataKey="cases.confirmed" stroke={color.toHSL(color.RED)} fill="url(#colorConfirmed)" />
           <Area type="monotone" stackId="2" dataKey="cases.recovered" stroke={color.toHSL(color.GREEN)} fill="url(#colorRecovered)" />
@@ -285,6 +287,8 @@ function Card(props) {
     id
   } = props;
 
+  const screen = useScreen();
+
   return (
     <article id={id} className="inset-m rounded border-s border-color-soft">
       <Stack size={size.XS}>
@@ -302,19 +306,21 @@ function Card(props) {
           </Chip>
         </Inline>
       </Stack>
-      <div className="absolute top-0 left-0 full-width full-height">
-        <ResponsiveContainer>
-          <AreaChart id="test" data={timeSeries}>
-            <defs>
-              <linearGradient id={`${id}-color`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color.toHSL(primaryColor)} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={color.toHSL(primaryColor)} stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <Area type="monotone" stackId="2" dataKey={dataKey} stroke={color.toHSL(primaryColor)} fill={`url(#${id}-color)`} />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
+      {!screen.isPhone() &&
+        <div className="absolute top-0 left-0 full-width full-height">
+          <ResponsiveContainer>
+            <AreaChart id="test" data={timeSeries}>
+              <defs>
+                <linearGradient id={`${id}-color`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={color.toHSL(primaryColor)} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={color.toHSL(primaryColor)} stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <Area type="monotone" stackId="2" dataKey={dataKey} stroke={color.toHSL(primaryColor)} fill={`url(#${id}-color)`} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      }
     </article>
   );
 }
