@@ -2,8 +2,8 @@ import axios from "axios";
 import DataLoader from "dataloader";
 import mapCountryNameToISO from "../../data/country_name_to_iso.json";
 
-const statsLoader = new DataLoader(getStats);
-const countriesInfoLoader = new DataLoader(getCountriesInfo);
+const statsLoader = new DataLoader(() => getStats());
+const countriesInfoLoader = new DataLoader(() => getCountriesInfo());
 
 async function getStats() {
   console.log("GET STATS");

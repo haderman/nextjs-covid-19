@@ -50,3 +50,73 @@ svg.app_heart_icon_fill_primary > path:last-child,
 @keyframes opacityTo1 {
   100% { opacity: 1; }
 }
+
+/* PROGRESS BAR */
+
+/* Make clicks pass-through */
+#nprogress {
+  pointer-events: none;
+}
+
+
+@keyframes noprogress-gradient {
+  0% { background-position: 0% }
+  50% { background-position: 100% }
+  100% { background-position: 0% }
+}
+
+#nprogress .bar {
+  background: hsl(202, 73%, 50%);
+
+  background: linear-gradient(
+    45deg,
+    hsl(110, 100%, 50%),
+    hsl(60, 100%, 50%),
+    hsl(202, 73%, 50%),
+    hsl(202, 84%, 70%)
+  );
+  background: linear-gradient(
+    45deg,
+    hsl(110, 100%, 50%),
+    hsl(202, 97%, 67%),
+    hsl(166, 71%, 51%),
+    hsl(51, 100%, 55%)
+  );
+
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background-size: 600% 100%;
+  animation: noprogress-gradient 4s linear infinite;
+  animation-direction: alternate;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px hsl(202, 73%, 50%), 0 0 5px hsl(202, 73%, 50%);
+  opacity: 1;
+
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+.nprogress-custom-parent {
+  overflow: hidden;
+  position: relative;
+}
+
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+  position: absolute;
+}

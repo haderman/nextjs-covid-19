@@ -1,5 +1,7 @@
 import App from 'next/app';
 import PropTypes from 'prop-types';
+import Router from "next/router";
+import NProgress from 'nprogress';
 import queryGraphql from "../graphql/queryGraphql";
 import Layout from "components/layout";
 import settings from "utils/settings";
@@ -7,6 +9,10 @@ import favorites from "utils/favorites";
 import "styles/utils.css";
 import "styles/layouts.css";
 import "styles/app.css";
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 MyApp.propTypes = {
   Component: PropTypes.func,
@@ -46,7 +52,7 @@ MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
 
   return { ...appProps, ...data };
-}
+};
 
 export default function MyApp({ Component, pageProps, allCountries, worldTotalCases }) {
   return (
