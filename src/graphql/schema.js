@@ -35,6 +35,7 @@ const typeDefs = gql`
     population: Int
     region: String
     subregion: String
+    latlng: [Float]
   }
 `;
 

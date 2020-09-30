@@ -102,6 +102,7 @@ const resolvers = {
         population: country.population,
         region: country.region,
         subregion: country.subregion,
+        latlng: country.latlng,
       };
     },
   }

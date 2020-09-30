@@ -38,5 +38,9 @@ Favorites.propTypes = {
 };
 
 export default function Favorites({ allCountries }) {
-  return <FavoritesCountriesList allCountries={allCountries} />;
+  return (
+    <div className="squish-inset-l">
+      <FavoritesCountriesList allCountries={allCountries} />
+    </div>
+  );
 }

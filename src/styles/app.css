@@ -120,3 +120,15 @@ svg.app_heart_icon_fill_primary > path:last-child,
 .nprogress-custom-parent #nprogress .bar {
   position: absolute;
 }
+
+
+/* WOLRD MAP */
+.map .leaflet-tile-container {
+  filter: grayscale(1) invert(1) brightness(0.5);
+}
+
+.map .leaflet-tile-container * {
+  filter: none;
+}
+
+

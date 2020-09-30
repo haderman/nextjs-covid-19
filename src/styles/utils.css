@@ -379,6 +379,7 @@ input[type=text]:focus {
 .justify-end { justify-content: flex-end; }
 .align-center { align-items: center; }
 .align-end { align-items: flex-end; }
+.align-stretch { align-items: stretch; }
 .column { flex-direction: column; }
 .flex-1 { flex: 1; }
 

@@ -21,7 +21,9 @@ export default function Layout({ children, sidebarProps }) {
       {isSidebarVisible &&
         <Sidebar {...sidebarProps} />
       }
-      <main className="squish-inset-l">{children}</main>
+      <main className="flex column">
+        {children}
+      </main>
       {isBottomNavigationVisible &&
         <BottomNavigation />
       }
