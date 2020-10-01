@@ -30,6 +30,9 @@ export async function getStaticProps() {
           latlng
           population
         }
+        totalCases {
+          ...CasesFields
+        }
       }
     }
     fragment CasesFields on Cases {
@@ -86,7 +89,6 @@ export default function Home({ worldTotalCases, worldTotalNewCases, worldTimeser
             </ChartContainer>
           }
         </TabPanel>
-
       </Stack>
     </>
   );
@@ -163,7 +165,7 @@ function Tab({ children, value, onChange, className = "" }) {
       aria-selected="true"
       aria-controls="nils-tab"
       id="nils"
-      className={`inset-m text-m text-primary ${className}`.trim()}
+      className={`inset-m text-m text-primary background-interactive:hover ${className}`.trim()}
       onClick={handleOnClick}
     >
       {children}
@@ -182,7 +184,7 @@ function TabPanel({ children }) {
       role="tabpanel"
       id="nils-tab"
       aria-labelledby="nils"
-      className="flex-1"
+      className="flex-1 relative"
     >
       {children}
     </div>
