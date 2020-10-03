@@ -27,10 +27,14 @@ export async function getStaticProps() {
       allCountries {
         info {
           name
+          flag
           latlng
           population
         }
         totalCases {
+          ...CasesFields
+        }
+        totalCasesPerMillion {
           ...CasesFields
         }
       }

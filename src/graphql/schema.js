@@ -13,6 +13,7 @@ const typeDefs = gql`
     iso: String
     timeserie: [DailyCase]
     totalCases: Cases
+    totalCasesPerMillion: Cases
     newCases: Cases
     info: CountryInfo
   }

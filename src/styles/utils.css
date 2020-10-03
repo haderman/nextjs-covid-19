@@ -310,6 +310,12 @@ input[type=text]:focus {
   white-space: nowrap;
   overflow: hidden;
 }
+.truncate-s {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 15ch;
+}
 .text-primary { color: var(--text-primary); }
 .text-secondary { color: var(--text-secondary); }
 .text-interactive { color: var(--color-interactive); }
