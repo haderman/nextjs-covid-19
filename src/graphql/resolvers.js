@@ -88,6 +88,19 @@ const resolvers = {
         actives: calcActiveCases(total),
       };
     },
+    totalCasesPerMillion: async ({ iso }) => {
+      const stats = await api.getStats();
+      const countriesInfo = await api.getCountriesInfo();
+      const total = [...stats[iso]].pop();
+      const country = countriesInfo.find(country => country.alpha3Code === iso);
+      const ONE_MILLION = 1000000;
+      return {
+        confirmed: parseInt(total.confirmed / country.population * ONE_MILLION),
+        recovered: parseInt(total.recovered / country.population * ONE_MILLION),
+        deaths: parseInt(total.deaths / country.population * ONE_MILLION),
+        actives: parseInt(calcActiveCases(total) / country.population * ONE_MILLION),
+      };
+    },
     newCases: async ({ iso }) => {
       const stats = await api.getStats();
       const timeserie = stats[iso];
@@ -102,6 +115,7 @@ const resolvers = {
         population: country.population,
         region: country.region,
         subregion: country.subregion,
+        latlng: country.latlng,
       };
     },
   }

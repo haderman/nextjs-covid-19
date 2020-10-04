@@ -13,6 +13,7 @@ const typeDefs = gql`
     iso: String
     timeserie: [DailyCase]
     totalCases: Cases
+    totalCasesPerMillion: Cases
     newCases: Cases
     info: CountryInfo
   }
@@ -35,6 +36,7 @@ const typeDefs = gql`
     population: Int
     region: String
     subregion: String
+    latlng: [Float]
   }
 `;
 

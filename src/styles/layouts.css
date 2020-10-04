@@ -78,6 +78,13 @@ desktop: 1920px;
       "header  header"
       "sidebar main"
   }
+  .layout-map {
+    grid-template-rows: 60px auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header header"
+      "main main"
+  }
 
   .layout > aside, .layout > main { overflow: auto; }
 }

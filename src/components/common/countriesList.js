@@ -55,7 +55,6 @@ export function FavoritesCountriesList({ allCountries }) {
 
 function DetailRow({ country }) {
   const isMounted = useMounted()
-
   return (
     <ActiveLink
       passHref

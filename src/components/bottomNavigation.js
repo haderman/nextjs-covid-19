@@ -1,12 +1,11 @@
-import ActiveLink from "./common/activeLink"
-import GlobeIcon from "../icons/home.svg"
-import ListIcon from "../icons/list.svg"
-import InfoIcon from "../icons/help.svg"
-import FavoriteIcon from "../icons/heart.svg"
+import ActiveLink from "./common/activeLink";
+import GlobeIcon from "../icons/home.svg";
+import ListIcon from "../icons/list.svg";
+import InfoIcon from "../icons/help.svg";
+import FavoriteIcon from "../icons/heart.svg";
 
 export default function BottomNavigation() {
-  const aClassNames = "full-height flex justify-center align-center"
-
+  const aClassNames = "full-height flex justify-center align-center";
   return (
     <nav className="sticky-bottom background-deep-0 border-top-s border-color-strong">
       <ol className="flex">
@@ -40,5 +39,5 @@ export default function BottomNavigation() {
         </li>
       </ol>
     </nav>
-  )
+  );
 }

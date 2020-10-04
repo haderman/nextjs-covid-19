@@ -24,7 +24,7 @@
   --border-radious-size-s: 6px;
   --border-radious-size-m: 8px;
   --border-radious-size-l: 12px;
-  --border-radious-size-xl: 16px;
+  --border-radious-size-xl: 22px;
 
   --text-primary: hsl(0, 0%, 90%);
   --text-secondary: hsl(0, 0%, 70%);
@@ -46,6 +46,8 @@
   --color-orange-soft: hsla(44, 85%, 57%, 0.2);
   --color-gray: hsl(0, 0%, 46%);
   --color-gray-soft: hsla(221, 14%, 68%, 0.2);
+  --color-blue: hsl(215, 89%, 57%);
+  --color-blue-soft: hsl(215, 49%, 37%);
 
   --color-deep-0: black;
   --color-deep-1: hsla(216, 40%, 4%, 1);
@@ -81,6 +83,8 @@
   --color-orange-soft: hsla(44, 85%, 57%, 0.2);
   --color-gray: hsl(0, 0%, 46%);
   --color-gray-soft: hsla(221, 14%, 68%, 0.2);
+  --color-blue: hsl(215, 89%, 57%);
+  --color-blue-soft: hsl(215, 49%, 37%);
 
   --color-deep-0: hsl(0, 0%, 100%);
   --color-deep-1: hsl(210, 13%, 97%);
@@ -306,6 +310,12 @@ input[type=text]:focus {
   white-space: nowrap;
   overflow: hidden;
 }
+.truncate-s {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 15ch;
+}
 .text-primary { color: var(--text-primary); }
 .text-secondary { color: var(--text-secondary); }
 .text-interactive { color: var(--color-interactive); }
@@ -344,6 +354,8 @@ input[type=text]:focus {
 .background-red-soft { background-color: var(--color-red-soft); }
 .background-gray { background-color: var(--color-gray); }
 .background-gray-soft { background-color: var(--color-gray-soft); }
+.background-blue { background-color: var(--color-blue); }
+.background-blue-soft { background-color: var(--color-blue-soft); }
 .background-interactive { background-color: var(--color-interactive-soft); }
 .background-interactive-selected { background-color: var(--color-interactive-soft-selected); }
 .background-interactive:hover { background-color: var(--color-interactive-soft-hover); }
@@ -379,6 +391,7 @@ input[type=text]:focus {
 .justify-end { justify-content: flex-end; }
 .align-center { align-items: center; }
 .align-end { align-items: flex-end; }
+.align-stretch { align-items: stretch; }
 .column { flex-direction: column; }
 .flex-1 { flex: 1; }
 

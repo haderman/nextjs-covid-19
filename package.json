@@ -18,10 +18,12 @@
     "classnames": "^2.2.6",
     "dataloader": "^2.0.0",
     "graphql": "^15.3.0",
+    "leaflet": "^1.7.1",
     "next": "9.4.4",
     "nprogress": "^0.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-leaflet": "^2.7.0",
     "recharts": "^1.8.5"
   },
   "devDependencies": {

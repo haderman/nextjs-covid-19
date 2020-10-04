@@ -38,5 +38,9 @@ Countries.propTypes = {
 };
 
 export default function Countries({ allCountries }) {
-  return <CountriesList allCountries={allCountries} />
+  return (
+    <div className="squish-inset-l">
+      <CountriesList allCountries={allCountries} />
+    </div>
+  );
 }
