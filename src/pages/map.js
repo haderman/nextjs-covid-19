@@ -197,24 +197,6 @@ function getButtons() {
   }];
 }
 
-function calcRadius(reason, country) {
-  const ONE_MILLION = 1000000;
-  switch (reason) {
-    case "confirmedCasesPerMillion":
-      return 10 * (country.totalCases.confirmed / country.info.population * ONE_MILLION);
-    case "confirmed":
-      return country.totalCases.confirmed / 4;
-    case "recovered":
-      return country.totalCases.recovered / 4;
-    case "actives":
-      return country.totalCases.actives / 2;
-    case "deaths":
-      return 8 * country.totalCases.deaths;
-    default:
-      return 0;
-  }
-}
-
 function getRanking(reason, countries) {
   let sortFunction = (
     reason === "confirmedCasesPerMillion" ?

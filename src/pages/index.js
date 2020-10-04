@@ -1,13 +1,10 @@
 import PropTypes from "prop-types";
 import Head from "next/head";
-import dynamic from "next/dynamic";
 import classNames from "classnames";
 import { ChartContainer, Chart, ChartCards } from "components/common/charts";
 import Stack from "components/common/stack";
-import usePersistedState from "hooks/usePersistedState";
 import queryGraphql from "../graphql/queryGraphql";
 
-const WorldMap = dynamic(() => import('../components/worldMap'), { ssr: false });
 
 export async function getStaticProps() {
   const data = await queryGraphql(`
@@ -21,20 +18,6 @@ export async function getStaticProps() {
       worldTimeserie {
         date
         cases {
-          ...CasesFields
-        }
-      }
-      allCountries {
-        info {
-          name
-          flag
-          latlng
-          population
-        }
-        totalCases {
-          ...CasesFields
-        }
-        totalCasesPerMillion {
           ...CasesFields
         }
       }
@@ -57,42 +40,24 @@ Home.propTypes = {
   allCountries: PropTypes.array,
 };
 
-export default function Home({ worldTotalCases, worldTotalNewCases, worldTimeserie, allCountries }) {
-  const [tabSelected, setTabSelected] = usePersistedState("home-tab-selected", "map");
-  const handleChangeTab = value => setTabSelected(value);
+export default function Home({ worldTotalCases, worldTotalNewCases, worldTimeserie }) {
   return (
     <>
       <Head>
         <title>World Total Cases</title>
       </Head>
-      <Stack className="flex-1">
+      <Stack>
         <Header>
-          <h2 className="squish-inset-l">World Total Cases</h2>
-          <TabList
-            selected={tabSelected}
-            value={tabSelected}
-            onChange={handleChangeTab}
-            activeClassName="background-interactive-selected"
-          >
-            <Tab value="map">Map</Tab>
-            <Tab value="charts">Charts</Tab>
-          </TabList>
+          <h2>World Total Cases</h2>
         </Header>
-        <TabPanel>
-          {tabSelected === "map" &&
-            <WorldMap allCountries={allCountries} />
-          }
-          {tabSelected === "charts" &&
-            <ChartContainer className="squish-inset-l">
-              <Chart timeserie={worldTimeserie} />
-              <ChartCards
-                timeserie={worldTimeserie}
-                totalCases={worldTotalCases}
-                newCases={worldTotalNewCases}
-              />
-            </ChartContainer>
-          }
-        </TabPanel>
+        <ChartContainer className="felx-1 squish-inset-l">
+          <Chart timeserie={worldTimeserie} />
+          <ChartCards
+            timeserie={worldTimeserie}
+            totalCases={worldTotalCases}
+            newCases={worldTotalNewCases}
+          />
+        </ChartContainer>
       </Stack>
     </>
   );
@@ -109,88 +74,11 @@ function Header({ children }) {
     "justify-space-between",
     "align-center",
     "full-width",
+    "squish-inset-l",
   );
   return (
     <header className={style}>
       {children}
     </header>
-  );
-}
-
-
-Tabs.propTypes = {
-  children: PropTypes.node,
-};
-
-function Tabs({ children }) {
-  return (
-    <div className="flex column flex-1">
-      {children}
-    </div>
-  );
-}
-
-TabList.propTypes = {
-  children: PropTypes.node,
-  onChange: PropTypes.func,
-  activeClassName: PropTypes.string,
-  value: PropTypes.string,
-};
-
-function TabList({ children, onChange, value, activeClassName }) {
-  return (
-    <div
-      role="tablist"
-      aria-label="Entertainment"
-      className="flex align-stretch full-height"
-    >
-      {React.Children.map(children, child =>
-        React.cloneElement(child, {
-          onChange,
-          className: child.props.value === value ? activeClassName : "",
-        })
-      )}
-    </div>
-  );
-}
-
-Tab.propTypes = {
-  children: PropTypes.node,
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-  className: PropTypes.string,
-};
-
-function Tab({ children, value, onChange, className = "" }) {
-  const handleOnClick = () => onChange(value);
-  return (
-    <button
-      role="tab"
-      aria-selected="true"
-      aria-controls="nils-tab"
-      id="nils"
-      className={`inset-m text-m text-primary background-interactive:hover ${className}`.trim()}
-      onClick={handleOnClick}
-    >
-      {children}
-    </button>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-};
-
-function TabPanel({ children }) {
-  return (
-    <div
-      tabIndex="0"
-      role="tabpanel"
-      id="nils-tab"
-      aria-labelledby="nils"
-      className="flex-1 relative"
-    >
-      {children}
-    </div>
   );
 }
