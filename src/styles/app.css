@@ -38,6 +38,10 @@ svg.app_heart_icon_fill_primary > path:last-child,
   .selected .display\:hover {
     opacity: 1 !important;
   }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 

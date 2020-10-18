@@ -3,6 +3,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import classNames from "classnames";
 import usePersistedState from "hooks/usePersistedState";
+import useScreen from 'hooks/useScreen';
 import * as size from "utils/size";
 import * as color from "utils/color";
 import Inline from "components/common/inline";
@@ -57,6 +58,7 @@ Map.propTypes = {
 
 export default function Map({ allCountries }) {
   const buttonList = getButtons();
+  const screen = useScreen();
   const [buttonActive, setButtonActive] = usePersistedState("button-map-active", buttonList[0]);
   const handleButtonGroupChange = value => setButtonActive(buttonList.find(btn => btn.value === value));
   const countriesTop10 = getRanking(buttonActive.value, allCountries);
@@ -76,51 +78,78 @@ export default function Map({ allCountries }) {
         circleColor={buttonActive.color}
         value={buttonActive.value}
       />
-      <div className="absolute inset-xl flex justify-center z-index-2 bottom-0">
-        <ButtonGroup
-          value={buttonActive.value}
-          onChange={handleButtonGroupChange}
-          activeClassName="background-interactive-selected"
-        >
-          {buttonList.map(btn =>
-            <Button
-              key={btn.value}
-              color={btn.color}
-              label={btn.label}
-              value={btn.value}
-            />
-          )}
-        </ButtonGroup>
-      </div>
-      <div className="absolute inset-xl flex justify-center z-index-2 top-0 right-0">
-        <Stack as="article" size={size.L} className="inset-m background-deep-0 rounded border-s border-color-strong">
-          <h2 className="text-primary">Ranking</h2>
-          <Stack as="ul" size={size.M}>
-            {countriesTop10.map(country =>
-              <Inline as="li" size={size.M} key={country.info.name}>
-                <img
-                  loading="lazy"
-                  className="icon-s"
-                  src={country.info.flag}
-                  alt={`Flag of ${country.info.name}`}
-                />
-                <Inline size={size.XL} className="flex-1 justify-space-between">
-                  <span className="text-s truncate-s">{country.info.name}</span>
-                  <Numeric
-                    value={buttonActive.value === "confirmedCasesPerMillion"
-                      ? country.totalCasesPerMillion.confirmed
-                      : country.totalCases[buttonActive.value]
-                    }
-                    className="text-secondary"
-                  />
-                </Inline>
-              </Inline>
-            )}
-          </Stack>
-        </Stack>
-      </div>
+      <ButtonGroup
+        screen={screen}
+        value={buttonActive.value}
+        onChange={handleButtonGroupChange}
+        activeClassName="background-interactive-selected border-deep-5"
+      >
+        {buttonList.map(btn =>
+          <Button
+            key={btn.value}
+            color={btn.color}
+            label={btn.label}
+            value={btn.value}
+          />
+        )}
+      </ButtonGroup>
+      {(screen.isDesktop() || screen.isBigDesktop()) &&
+        <TableContainer>
+          <h2 className="text-primary">
+            {buttonActive.label}
+          </h2>
+          <CountriesList countries={countriesTop10} buttonActive={buttonActive} />
+        </TableContainer>
+      }
     </>
   );
+}
+
+TableContainer.propTypes = {
+  children: PropTypes.nonde,
+};
+
+function TableContainer({ children }) {
+  return (
+    <div className="absolute inset-xl flex justify-center z-index-2 top-0 right-0">
+      <Stack as="article" size={size.L} className="inset-m background-deep-0 rounded border-s border-color-strong">
+        {children}
+      </Stack>
+    </div>
+  );
+}
+
+CountriesList.propTypes = {
+  countries: PropTypes.array,
+  buttonActive: PropTypes.object,
+};
+
+function CountriesList({ countries, buttonActive }) {
+  return (
+    <Stack as="ul" size={size.M}>
+      {countries.map((country, index) =>
+        <Inline as="li" size={size.M} key={country.info.name}>
+          <span className="text-primary">{index + 1}</span>
+          <img
+            loading="lazy"
+            className="icon-s"
+            src={country.info.flag}
+            alt={`Flag of ${country.info.name}`}
+          />
+          <Inline size={size.XL} className="flex-1 justify-space-between">
+            <span className="text-s truncate-s">{country.info.name}</span>
+            <Numeric
+              value={buttonActive.value === "confirmedCasesPerMillion"
+                ? country.totalCasesPerMillion.confirmed
+                : country.totalCases[buttonActive.value]
+              }
+              className="text-secondary"
+            />
+          </Inline>
+        </Inline>
+      )}
+    </Stack>
+  )
 }
 
 ButtonGroup.propTypes = {
@@ -131,8 +160,15 @@ ButtonGroup.propTypes = {
 };
 
 function ButtonGroup({ children, onChange, value, activeClassName }) {
+  const screen = useScreen();
+
+  const containerClassName = classNames("absolute z-index-2", {
+    "bottom-0 justify-center inset-xl": screen.isBigDesktop() || screen.isDesktop(),
+    "fixed top-0 overflow-auto full-width stretch-inset-xl": screen.isPhone() || screen.isTablet()
+  });
+
   return (
-    <Inline size={size.M}>
+    <Inline size={size.M} className={containerClassName}>
       {React.Children.map(children, child =>
         React.cloneElement(child, {
           onChange,
@@ -166,7 +202,7 @@ function Button({ color, label, value, className, onChange }) {
   return (
     <button onClick={handleOnClick} className={buttonStyle}>
       <span className={`circle-xl background-${color}`} />
-      <span className="inset-s text-primary">
+      <span className="inset-s text-primary text-nowrap">
         {label}
       </span>
     </button>

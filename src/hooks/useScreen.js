@@ -8,20 +8,9 @@ const screenType = {
 };
 
 export default function useScreen() {
-  const isClient = typeof window === "object";
-
-  function getSize() {
-    return {
-      width: isClient ? window.innerWidth : undefined,
-      height: isClient? window.innerHeight : undefined,
-    };
-  }
-
-  const [windowSize, setWindowSize] = useState(getSize());
+  const [windowSize, setWindowSize] = useState(getSize);
 
   useEffect(function checkWidnowResize() {
-    if (isClient) return;
-
     function handleResize() {
       setWindowSize(getSize());
     }
@@ -31,7 +20,7 @@ export default function useScreen() {
     return function cleanupEventListener() {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [windowSize]);
 
   const screen = (
     windowSize.width === undefined || windowSize.width < 600 ? screenType.PHONE :
@@ -49,6 +38,14 @@ export default function useScreen() {
       screen === screenType.DESKTOP,
     isBigDesktop: () =>
       screen === screenType.BIG_DESKTOP,
+  };
+}
+
+function getSize() {
+  const isClient = typeof window === "object";
+  return {
+    width: isClient ? window.innerWidth : undefined,
+    height: isClient? window.innerHeight : undefined,
   };
 }
 

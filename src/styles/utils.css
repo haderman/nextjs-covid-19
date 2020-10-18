@@ -305,6 +305,7 @@ input[type=text]:focus {
 .text-left { text-align: left; }
 .text-center { text-align: center; }
 .text-end { text-align: end;}
+.text-nowrap { white-space: nowrap; }
 .truncate {
   text-overflow: ellipsis;
   white-space: nowrap;
