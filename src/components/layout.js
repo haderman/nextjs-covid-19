@@ -28,15 +28,17 @@ export default function Layout({ children, sidebarProps }) {
     "layout-map": router.pathname === "/map",
   });
 
+  const isHeaderVisible = screen.isDesktop() || screen.isBigDesktop() || router.pathname !== "/map";
+
   return (
     <div className={classNameRoot}>
-      {router.pathname !== "/map" &&
+      {isHeaderVisible &&
         <Header screen={screen}>
           <h1>COVID-19 Tracker</h1>
           {isNavVisible &&
             <Nav>
               <NavItem href="/map" label="Map" />
-              <NavItem href="/" label="Charts" />
+              <NavItem href="/" label="Charts" isAciveInSubpaths={router.pathname !== "/map"} />
             </Nav>
           }
         </Header>
@@ -94,12 +96,13 @@ function Nav({ children }) {
 NavItem.propTypes = {
   label: PropTypes.string,
   href: PropTypes.string,
+  isAciveInSubpaths: PropTypes.bool
 };
 
-function NavItem({ label, href }) {
+function NavItem({ label, href, isAciveInSubpaths = false }) {
   return (
     <li className="flex-1 full-height">
-      <ActiveLink href={href} passHref activeClassName="border-bottom-s">
+      <ActiveLink href={href} passHref activeClassName="border-bottom-s" isAciveInSubpaths={isAciveInSubpaths}>
         <a className="inset-m">
           {label}
         </a>
