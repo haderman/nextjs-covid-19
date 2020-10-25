@@ -28,12 +28,12 @@ export default function Layout({ children, sidebarProps }) {
     "layout-map": router.pathname === "/map",
   });
 
-  const isHeaderVisible = screen.isDesktop() || screen.isBigDesktop() || router.pathname !== "/map";
+  const isHeaderVisible = isMounted && (screen.isDesktop() || screen.isBigDesktop() || router.pathname !== "/map");
 
   return (
     <div className={classNameRoot}>
       {isHeaderVisible &&
-        <Header screen={screen}>
+        <Header>
           <h1>COVID-19 Tracker</h1>
           {isNavVisible &&
             <Nav>

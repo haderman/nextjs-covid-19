@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import classNames from "classnames";
 import usePersistedState from "hooks/usePersistedState";
 import useScreen from 'hooks/useScreen';
+import useMounted from 'hooks/useMounted';
 import * as size from "utils/size";
 import * as color from "utils/color";
 import Inline from "components/common/inline";
@@ -59,6 +60,7 @@ Map.propTypes = {
 export default function Map({ allCountries }) {
   const buttonList = getButtons();
   const screen = useScreen();
+  const isMounted = useMounted();
   const [buttonActive, setButtonActive] = usePersistedState("button-map-active", buttonList[0]);
   const handleButtonGroupChange = value => setButtonActive(buttonList.find(btn => btn.value === value));
   const countriesTop10 = getRanking(buttonActive.value, allCountries);
@@ -78,22 +80,24 @@ export default function Map({ allCountries }) {
         circleColor={buttonActive.color}
         value={buttonActive.value}
       />
-      <ButtonGroup
-        screen={screen}
-        value={buttonActive.value}
-        onChange={handleButtonGroupChange}
-        activeClassName="background-interactive-selected border-deep-5"
-      >
-        {buttonList.map(btn =>
-          <Button
-            key={btn.value}
-            color={btn.color}
-            label={btn.label}
-            value={btn.value}
-          />
-        )}
-      </ButtonGroup>
-      {(screen.isDesktop() || screen.isBigDesktop()) &&
+      {isMounted &&
+        <ButtonGroup
+          screen={screen}
+          value={buttonActive.value}
+          onChange={handleButtonGroupChange}
+          activeClassName="background-interactive-selected border-deep-5"
+        >
+          {buttonList.map(btn =>
+            <Button
+              key={btn.value}
+              color={btn.color}
+              label={btn.label}
+              value={btn.value}
+            />
+          )}
+        </ButtonGroup>
+      }
+      {isMounted && (screen.isDesktop() || screen.isBigDesktop()) &&
         <TableContainer>
           <h2 className="text-primary">
             {buttonActive.label}
@@ -106,7 +110,7 @@ export default function Map({ allCountries }) {
 }
 
 TableContainer.propTypes = {
-  children: PropTypes.nonde,
+  children: PropTypes.node,
 };
 
 function TableContainer({ children }) {

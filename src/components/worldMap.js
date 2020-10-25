@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import { Map, Circle, TileLayer, Tooltip } from "react-leaflet";
 import * as color from "utils/color";
-import screen from "hooks/useScreen";
 import useScreen from "hooks/useScreen";
-
-const position = [30, -30];
+import usePersistedState from "hooks/usePersistedState"
 
 WorldMap.propTypes = {
   allCountries: PropTypes.array,
@@ -20,13 +18,23 @@ WorldMap.propTypes = {
 
 export default function WorldMap({ allCountries, circleColor, value }) {
   const screen = useScreen();
+  const [viewport, setViewport] = usePersistedState('map-viewport', {
+    center: [30, -90],
+    zoom: 2
+  });
+
+  function handleViewportChanges(viewport) {
+    setViewport(viewport);
+  }
+
   return (
     <Map
       className="map z-index-1 flex-1 full-width full-height"
-      center={position}
-      zoom={2.5}
+      center={viewport.center}
+      zoom={viewport.zoom}
       minZoom={2}
       maxZoom={5}
+      onViewportChange={handleViewportChanges}
       zoomControl={screen.isDesktop() || screen.isBigDesktop()}
     >
       <TileLayer
