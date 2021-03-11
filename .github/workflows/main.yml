@@ -1,18 +1,17 @@
   
-name: Rebuild to update static data on the app deploy
+name: Trigger deployment
 on:
   schedule:
     - cron: "0 */4 * * *"
     
 jobs:
-  force_new_deploy:
+  deploy:
+    name: Trigger deployment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          date > last-rebuild-date.txt
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit --allow-empty -m "Empty commit to deploy"
-          git push
+      - uses: amondnet/vercel-action@v20.0.0
+        with:
+          # Vercel token
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: '--prod'
