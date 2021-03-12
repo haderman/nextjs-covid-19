@@ -1,17 +1,11 @@
-  
 name: Trigger deployment
 on:
-  schedule:
-    - cron: "0 */4 * * *"
-    
+  workflow_dispatch:
+
 jobs:
-  deploy:
+  build:
     name: Trigger deployment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: amondnet/vercel-action@v20.0.0
-        with:
-          # Vercel token
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: '--prod'
+      - name: Trigger webhook
+        run: curl ${{ secrets.VERCEL_TOKEN }}
