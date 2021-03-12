@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger webhook
-        run: curl -X POST ${{ vercel-develop-webhook.VERCEL_TOKEN }}
+        run: curl -X POST ${{ secrets.VERCEL_TOKEN }}
