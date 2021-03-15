@@ -1,3 +1,10 @@
+import { Stack } from '@hadermania/components';
+
 export default function About() {
-  return <h1>Hello</h1>;
+  return (
+    <Stack as="section">
+      <h1>.</h1>
+      <h1>.</h1>
+    </Stack>
+  );
 }

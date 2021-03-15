@@ -6,9 +6,11 @@ import queryGraphql from "../graphql/queryGraphql";
 import Layout from "components/layout";
 import settings from "utils/settings";
 import favorites from "utils/favorites";
+
 import "styles/utils.css";
 import "styles/layouts.css";
 import "styles/app.css";
+import "@hadermania/components/dist/index.css";
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
