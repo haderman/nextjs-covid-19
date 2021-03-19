@@ -4,11 +4,14 @@ import Router from "next/router";
 import NProgress from 'nprogress';
 import queryGraphql from "../graphql/queryGraphql";
 import Layout from "components/layout";
+import GoogleTagManager from "components/googleTagManager";
 import settings from "utils/settings";
 import favorites from "utils/favorites";
+
 import "styles/utils.css";
 import "styles/layouts.css";
 import "styles/app.css";
+import "@hadermania/components/dist/index.css";
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -59,7 +62,9 @@ export default function MyApp({ Component, pageProps, allCountries, worldTotalCa
     <settings.Provider>
       <favorites.Provider>
         <Layout sidebarProps={{ allCountries, worldTotalCases }}>
-          <Component {...pageProps} />
+          <GoogleTagManager>
+            <Component {...pageProps} />
+          </GoogleTagManager>
         </Layout>
       </favorites.Provider>
     </settings.Provider>
