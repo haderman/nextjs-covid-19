@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger webhook
-        run: https://api.vercel.com/v1/integrations/deploy/QmdCd5vS9gFpTxLUoD8LcRoJ1e8MiQqkurLHuyN55WNKVy/GRJ29SyY8W
+        run: curl https://api.vercel.com/v1/integrations/deploy/QmdCd5vS9gFpTxLUoD8LcRoJ1e8MiQqkurLHuyN55WNKVy/GRJ29SyY8W
