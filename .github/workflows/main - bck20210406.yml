@@ -1,0 +1,12 @@
+name: Trigger deployment
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+
+jobs:
+  build:
+    name: Trigger deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger webhook
+        run: curl -X POST ${{ secrets.VERCEL_TOKEN }}

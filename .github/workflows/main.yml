@@ -1,7 +1,7 @@
 name: Trigger deployment
 on:
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "*/15 * * * *"
 
 jobs:
   build:
@@ -9,4 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger webhook
-        run: curl -X POST ${{ secrets.VERCEL_TOKEN }}
+        run: | 
+        curl --request POST \
+          --url 'https:///sjp-covid-20-sun816.vercel.app/api/cron' \
+          --header 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}'
