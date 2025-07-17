@@ -16,7 +16,7 @@ Sidebar.propTypes = {
   worldTotalNewCases:  PropTypes.object,
 };
 
-export default function Sidebar({ allCountries, worldTotalCases, worldTotalNewCases }) {
+export default function Sidebar({ allCountries, worldTotalCases }) {
   return (
     <aside className="squish-inset-l">
       <Stack size={size.XL}>
@@ -39,6 +39,10 @@ function GlobalCases({ worldTotalCases }) {
     </Stack>
   )
 }
+
+GlobalCases.propTypes = {
+  worldTotalCases: PropTypes.object,
+};
 
 GlobalCasesData.propTypes = {
   confirmed: PropTypes.number,
@@ -104,6 +108,10 @@ function Countries({ allCountries }) {
     </Stack>
   )
 }
+
+Countries.propTypes = {
+  allCountries: PropTypes.array,
+};
 
 Tabs.propTypes = {
   value: PropTypes.string,

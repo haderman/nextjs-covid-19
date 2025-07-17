@@ -22,11 +22,37 @@ async function getStats() {
 
 async function getCountriesInfo() {
   console.log("GET COUNTRIES INFO");
-  const response = await axios.get("https://restcountries.eu/rest/v2/all");
-  if (!isObject(response.data)) {
+  // Use new REST Countries v3 endpoint and request only needed fields
+  const fields = [
+    "name",
+    "flags",
+    "population",
+    "region",
+    "subregion",
+    "cca3",
+    "latlng",
+  ].join(",");
+
+  const response = await axios.get(
+    `https://restcountries.com/v3.1/all?fields=${fields}`
+  );
+
+  if (!Array.isArray(response.data)) {
     return [{}];
   }
-  return [response.data];
+
+  // Transform the v3 response to match the original schema expected by the app
+  const transformed = response.data.map(country => ({
+    name: country.name?.common ?? "",
+    flag: country.flags?.svg ?? country.flags?.png ?? country.flag ?? "",
+    population: country.population ?? 0,
+    region: country.region ?? "",
+    subregion: country.subregion ?? "",
+    latlng: country.latlng ?? [],
+    alpha3Code: country.cca3 ?? "",
+  }));
+
+  return [transformed];
 }
 
 function isObject(value) {

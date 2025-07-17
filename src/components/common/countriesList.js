@@ -19,9 +19,11 @@ CountriesList.propTypes = {
 };
 
 export default function CountriesList({ allCountries }) {
+  const countries = allCountries || [];
+
   return (
     <Stack as="ul" size={size.S}>
-      {allCountries
+      {countries
         .sort(descending)
         .map(country =>
           <li key={country.iso} className="full-width hover-control hover-control-adjacents">
@@ -52,6 +54,21 @@ export function FavoritesCountriesList({ allCountries }) {
     </Stack>
   );
 }
+
+
+
+DetailRow.propTypes = {
+  country: PropTypes.shape({
+    iso: PropTypes.string.isRequired,
+    info: PropTypes.shape({
+      flag: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    totalCases: PropTypes.shape({
+      confirmed: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 function DetailRow({ country }) {
   const isMounted = useMounted()

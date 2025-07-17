@@ -70,4 +70,3 @@ export default function MyApp({ Component, pageProps, allCountries, worldTotalCa
     </settings.Provider>
   );
 }
-

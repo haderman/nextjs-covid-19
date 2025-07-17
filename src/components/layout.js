@@ -28,7 +28,10 @@ export default function Layout({ children, sidebarProps }) {
     "layout-map": router.pathname === "/map",
   });
 
-  const isHeaderVisible = isMounted && (screen.isDesktop() || screen.isBigDesktop() || router.pathname !== "/map");
+  const isHeaderVisible = (
+    isMounted
+    && (screen.isDesktop() || screen.isBigDesktop() || router.pathname !== "/map")
+  );
 
   return (
     <div className={classNameRoot}>
