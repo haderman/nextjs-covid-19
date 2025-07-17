@@ -36,7 +36,7 @@ export function toHSL(color) {
 export function isColor(props, propName, componentName) {
   const value = props[propName];
 
-  if (value === undefined || value === null || value === "") {
+  if (value === undefined || value === null || value === "") {
     return null;
   }
 

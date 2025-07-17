@@ -1,5 +1,6 @@
 import * as size from "utils/size"
 import * as color from "utils/color"
+import PropTypes from "prop-types"
 
 function Chip({ children, size, rounded, background, color }) {
   const styles = [
@@ -20,6 +21,7 @@ function Chip({ children, size, rounded, background, color }) {
 }
 
 Chip.propTypes = {
+  children: PropTypes.node,
   size: size.isSize,
   rounded: size.isSize,
   background: color.isColor,

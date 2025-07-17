@@ -24,6 +24,8 @@ function ActiveLink({ children, activeClassName, isAciveInSubpaths, ...props }) 
 
 ActiveLink.propTypes = {
   activeClassName: PropTypes.string.isRequired,
+  href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  as: PropTypes.string,
   isAciveInSubpaths: PropTypes.bool,
   children: PropTypes.node,
 }

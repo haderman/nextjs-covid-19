@@ -146,6 +146,14 @@ function Card(props) {
   )
 }
 
+Card.propTypes = {
+  topText: PropTypes.string.isRequired,
+  middleText: PropTypes.number.isRequired,
+  bottomText: PropTypes.number.isRequired,
+  middleTextColor: color.isColor,
+  bottomTextColor: color.isColor,
+}
+
 export default {
   Cards,
   Compact
